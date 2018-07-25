@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Employees List</string>
+    <string name="specListLabel">Specialties in our firm</string>
+</resources>
