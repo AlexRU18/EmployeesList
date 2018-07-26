@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Employees List</string>
-    <string name="specListLabel">Specialties in our firm</string>
+    <string name="spec_list_label">Specialties in our firm:</string>
+    <string name="spec_id_prefix">ID: %1$s</string>
 </resources>

@@ -1,4 +1,4 @@
-package ru.alexsuvorov.employeeslist.Utils;
+package ru.alexsuvorov.employeeslist.utils;
 
 import android.app.Activity;
 import android.content.Context;
