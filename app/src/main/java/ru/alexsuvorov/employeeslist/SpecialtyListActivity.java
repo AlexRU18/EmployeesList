@@ -101,7 +101,6 @@ public class SpecialtyListActivity extends AppCompatActivity {
                             worker.setSpecialty(workerSpecialtyId);
                             workerList.add(worker);
                         }
-                        Log.d(TAG, workerList.get(2).getF_name());
                     } catch (final JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
                     }
