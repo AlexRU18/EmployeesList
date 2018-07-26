@@ -32,7 +32,6 @@ public class SpecialtyListActivity extends AppCompatActivity {
     ListView listView;
     EmployeesListFragment employeesListFragment;
     private final String TAG = getClass().getSimpleName();
-    DataLoader loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +40,7 @@ public class SpecialtyListActivity extends AppCompatActivity {
         listView = findViewById(R.id.spec_list);
         employeesListFragment = new EmployeesListFragment();
         if (Utils.isNetworkAvailable(this)) {
-            loader = new DataLoader(this);
-            if (!loader.isCancelled()) {
-                loader.execute(URL);
-            }
-            //new DataLoader(this).execute(URL);
+            new DataLoader(this).execute(URL);
         } else {
             Toast.makeText(this, "No Network Connection", Toast.LENGTH_LONG).show();
         }

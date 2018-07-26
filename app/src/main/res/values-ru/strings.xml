@@ -2,4 +2,5 @@
 <resources>
     <string name="spec_list_label">Специальности в нашей фирме</string>
     <string name="app_name">Список специальностей</string>
+    <string name="employees_list_label">Сотрудники по этой специальности</string>
 </resources>
