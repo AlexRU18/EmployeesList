@@ -56,6 +56,7 @@ public class SpecialtyListAdapter extends ArrayAdapter<Specialty> {
         return view;
     }
 
+
     private class ViewHolder {
         private TextView specId, specName;
     }
