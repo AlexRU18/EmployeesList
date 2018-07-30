@@ -1,4 +1,4 @@
-package ru.alexsuvorov.employeeslist.adapters;
+package ru.alexsuvorov.employee_service.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ru.alexsuvorov.employeeslist.R;
-import ru.alexsuvorov.employeeslist.model.Specialty;
+import ru.alexsuvorov.employee_service.R;
+import ru.alexsuvorov.employee_service.model.Specialty;
 
 public class SpecialtyListAdapter extends ArrayAdapter<Specialty> {
 
