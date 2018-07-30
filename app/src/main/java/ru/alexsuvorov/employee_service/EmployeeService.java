@@ -6,10 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -22,8 +22,10 @@ import java.util.Set;
 
 import ru.alexsuvorov.employee_service.db.DBAdapter;
 import ru.alexsuvorov.employee_service.db.onDbListeners;
+import ru.alexsuvorov.employee_service.fragments.SpecialtyListFragment;
 import ru.alexsuvorov.employee_service.model.Specialty;
 import ru.alexsuvorov.employee_service.model.Worker;
+import ru.alexsuvorov.employee_service.utils.DateUtil;
 import ru.alexsuvorov.employee_service.utils.HttpHandler;
 import ru.alexsuvorov.employee_service.utils.Utils;
 
@@ -32,7 +34,6 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
     ArrayList<Specialty> specialtyList = new ArrayList<>();
     Set<Specialty> set = new HashSet<>();
     ArrayList<Worker> workerList = new ArrayList<>();
-    ListView listView;
     final String TAG = getClass().getSimpleName();
     public DBAdapter mDbAdapter;
     FrameLayout container;
@@ -48,16 +49,12 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
         } else {
             Toast.makeText(this, "No Network Connection", Toast.LENGTH_LONG).show();
         }
-
-        /*EmployeesListFragment employeesListFragment = new EmployeesListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("specialty_position", position);
-        employeesListFragment.setArguments(bundle);
-        FragmentManager fManager = getSupportFragmentManager();  //Support?
+        SpecialtyListFragment employeesListFragment = new SpecialtyListFragment();
+        FragmentManager fManager = getSupportFragmentManager();
         fManager.beginTransaction()
                 .addToBackStack(null)
                 .add(R.id.fragmentContainer, employeesListFragment)
-                .commit();*/
+                .commit();
     }
 
     void logCursor(Cursor cursor) {
@@ -121,12 +118,12 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                             Worker worker = new Worker();
                             worker.setF_name(workerFName);
                             worker.setL_name(workerLName);
-                            worker.setAge(20);  //!!!!!!!!!!!!!!
                             worker.setBithday(workerBithday);
+                            worker.setAge(DateUtil.calculateAge(workerBithday));  //!!!!!!!!!!!!!!
                             worker.setAvatarLink(workerAvatarUrl);
                             worker.setSpecialty(specialtyId);
                             workerList.add(worker);
-                            mDbAdapter.insertData(worker);
+                            mDbAdapter.insertWorker(worker);
                             //Log.d(TAG, "Worker: " + worker.getF_name() + " " + worker.getL_name() + " " + worker.getAge());
                         }
                     } catch (final JSONException e) {

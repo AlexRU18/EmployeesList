@@ -74,24 +74,34 @@ public class Worker {
     }
 
     public static ContentValues getContentValues(Worker worker) {
-
         ContentValues initialValues = new ContentValues();
-
         if (worker.getF_name() != null) {
-            initialValues.put(DBAdapter.COLUMN_USER_ID, worker.getF_name()); //COLUMN
+            initialValues.put(DBAdapter.COLUMN_FNAME, worker.getF_name()); //COLUMN
         }
         if (worker.getL_name() != null) {
-            initialValues.put(DBAdapter.COLUMN_USERNAME, worker.getL_name()); //COLUMN
+            initialValues.put(DBAdapter.COLUMN_LNAME, worker.getL_name()); //COLUMN
         }
         if (worker.getBithday() != null) {
-            initialValues.put(DBAdapter.COLUMN_USERNAME, worker.getBithday()); //COLUMN
+            initialValues.put(DBAdapter.COLUMN_BITHDAY, worker.getBithday()); //COLUMN
         }
-        initialValues.put(DBAdapter.COLUMN_USERNAME, worker.getAge()); //COLUMN
+        initialValues.put(DBAdapter.COLUMN_AGE, worker.getAge()); //COLUMN
         if (worker.getAvatarLink() != null) {
-            initialValues.put(DBAdapter.COLUMN_USERNAME, worker.getAvatarLink()); //COLUMN
+            initialValues.put(DBAdapter.COLUMN_AVATARLINK, worker.getAvatarLink()); //COLUMN
         }
-        initialValues.put(DBAdapter.COLUMN_USERNAME, worker.getSpecialty()); //COLUMN
-
+        initialValues.put(DBAdapter.COLUMN_SPECIALTY, worker.getSpecialty()); //COLUMN
         return initialValues;
+    }
+
+    @Override
+    public String toString() {
+        return "Worker{" +
+                "TAG='" + TAG + '\'' +
+                ", f_name='" + f_name + '\'' +
+                ", l_name='" + l_name + '\'' +
+                ", bithday='" + bithday + '\'' +
+                ", age=" + age +
+                ", avatarLink='" + avatarLink + '\'' +
+                ", specialty=" + specialty +
+                '}';
     }
 }

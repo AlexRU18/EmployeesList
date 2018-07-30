@@ -12,24 +12,26 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import ru.alexsuvorov.employee_service.R;
+import ru.alexsuvorov.employee_service.db.DBAdapter;
 
 public class SpecialtyListFragment extends Fragment {
 
-    ListView specialtyListView;
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
+    private DBAdapter dbAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.specialty_list,
                 container, false);
+        dbAdapter.getAllSpecialty();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        specialtyListView = view.findViewById(R.id.spec_list);
+        ListView specialtyListView = view.findViewById(R.id.spec_list);
 
         specialtyListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {

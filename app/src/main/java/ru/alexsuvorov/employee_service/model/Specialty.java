@@ -1,5 +1,9 @@
 package ru.alexsuvorov.employee_service.model;
 
+import android.content.ContentValues;
+
+import ru.alexsuvorov.employee_service.db.DBAdapter;
+
 public class Specialty {
 
     private int specId;
@@ -26,24 +30,12 @@ public class Specialty {
         this.specName = specName;
     }
 
-    @Override
-    public String toString() {
-        return "id [" + specId + "], name[" + specName + "]";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Specialty specialty = (Specialty) o;
-        if (specId != specialty.specId) return false;
-        return specName != null ? specName.equals(specialty.specName) : specialty.specName == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = specId;
-        result = 31 * result + (specName != null ? specName.hashCode() : 0);
-        return result;
+    public static ContentValues getContentValues(Specialty specialty) {
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(DBAdapter.COLUMN_SPECIALTY_ID, specialty.getSpecId());
+        if (specialty.getSpecName() != null) {
+            initialValues.put(DBAdapter.COLUMN_SPECIALTY_NAME, specialty.getSpecName());
+        }
+        return initialValues;
     }
 }
