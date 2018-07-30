@@ -3,7 +3,6 @@ package ru.alexsuvorov.employee_service;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -57,19 +56,14 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                 .commit();
     }
 
-    void logCursor(Cursor cursor) {
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                String str;
-                do {
-                    str = "";
-                    for (String cn : cursor.getColumnNames()) {
-                        str = str.concat(cn + " = " + cursor.getString(cursor.getColumnIndex(cn)) + "; ");
-                    }
-                    Log.d(TAG, str);
-                } while (cursor.moveToNext());
-            }
-        } else Log.d(TAG, "Cursor is null");
+    @Override
+    public void onOperationSuccess(String tableName, int operation, Object obj) {
+
+    }
+
+    @Override
+    public void onOperationFailed(String tableName, int operation) {
+
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -114,7 +108,6 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                                     .getString("name");
                             Specialty specialty = new Specialty(specialtyId, specialtyName);
                             set.add(specialty);
-
                             Worker worker = new Worker();
                             worker.setF_name(workerFName);
                             worker.setL_name(workerLName);
@@ -124,7 +117,9 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                             worker.setSpecialty(specialtyId);
                             workerList.add(worker);
                             mDbAdapter.insertWorker(worker);
-                            //Log.d(TAG, "Worker: " + worker.getF_name() + " " + worker.getL_name() + " " + worker.getAge());
+                        }
+                        for (Specialty specialty : specialtyList = new ArrayList<>(set)) {
+                            mDbAdapter.insertSpecialty(specialty);
                         }
                     } catch (final JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -193,18 +188,7 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                 dManager.close();*/
 
                 pdialog.dismiss();
-                //pdialog.setCancelable(true);
             }
         }
-    }
-
-    @Override
-    public void onOperationSuccess(String tableName, int operation, Object obj) {
-
-    }
-
-    @Override
-    public void onOperationFailed(String tableName, int operation) {
-
     }
 }

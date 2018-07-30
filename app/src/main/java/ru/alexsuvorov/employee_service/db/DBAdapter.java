@@ -16,15 +16,15 @@ import ru.alexsuvorov.employee_service.model.Worker;
 
 public class DBAdapter {
 
-    private final int DATABASE_VERSION = 1;
+    private final int DATABASE_VERSION = 2;
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
-    public static final String DATABASE_NAME = "db";
-    public static final String COLUMN_AUTO_INCREMENT_ID = "auto_increment_id";
+    private static final String DATABASE_NAME = "db";
+    private static final String COLUMN_AUTO_INCREMENT_ID = "auto_increment_id";
     private onDbListeners mDbListener;
-    public static final int actionGetData = 1, actionInsert = 2, actionUpdate = 3, actionDelete = 4, actionDeleteAll = 5;
+    private static final int actionGetData = 1, actionInsert = 2, actionUpdate = 3, actionDelete = 4, actionDeleteAll = 5;
     private Object object = null;
-    final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     public DBAdapter(Context context, EmployeeService listener) {
         DBHelper = new DatabaseHelper(context);
@@ -33,7 +33,7 @@ public class DBAdapter {
 
     private class DatabaseHelper extends SQLiteOpenHelper {
 
-        public DatabaseHelper(Context context) {
+        DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
@@ -41,31 +41,23 @@ public class DBAdapter {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_EMPLOYEES_TABLE);
             db.execSQL(CREATE_SPECIALTY_TABLE);
+            //Log.d(TAG, "DATABASE_ONCREATE");
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS Savedfiles");
             onCreate(db);
+            Log.d(TAG, "DATABASE_ONUPDATE");
         }
     }
 
-    public DBAdapter open() throws SQLException {
+    private void open() throws SQLException {
         db = DBHelper.getWritableDatabase();
-        return this;
     }
 
     private void close() {
         DBHelper.close();
-    }
-
-    public boolean isValidCursor(Cursor cur) {
-        try {
-            return cur != null && cur.getCount() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     private static final String TABLE_SPECIALTY = "specialty_table";
@@ -83,8 +75,9 @@ public class DBAdapter {
 
     public void insertSpecialty(Specialty specialty) {
         open();
+        Log.d(TAG, "DATABASE_insertSpecialty");
         ContentValues initialValues = Specialty.getContentValues(specialty);
-        boolean var = db.insert(TABLE_SPECIALTY, null, initialValues) > 0;
+        boolean var = db.insertWithOnConflict(TABLE_SPECIALTY, null, initialValues, SQLiteDatabase.CONFLICT_REPLACE) > 0;
         if (var) {
             mDbListener.onOperationSuccess(TABLE_SPECIALTY, actionInsert, object);
         } else {
@@ -93,22 +86,24 @@ public class DBAdapter {
         close();
     }
 
-    public void getAllSpecialty() {
+    public ArrayList<Specialty> getAllSpecialty() {
+        ArrayList<Specialty> specialtyList = new ArrayList<>();
         open();
         Cursor cur = db.query(TABLE_SPECIALTY, GET_ALL_SPECIALTY(), null, null, null, null, null);
-        if (cur != null && cur.getCount() > 0) {
-            mDbListener.onOperationSuccess(TABLE_SPECIALTY, actionGetData, cur);
-        } else {
-            mDbListener.onOperationFailed(TABLE_SPECIALTY, actionGetData);
+        if (cur.moveToFirst()) {
+            for (int i = 0; i < cur.getCount(); i++) {
+                Specialty specialty = new Specialty(cur.getInt(1), cur.getString(2));
+                cur.moveToNext();
+                Log.d(TAG, "GET_DATA_SPECIALTY: " + specialty.toString());
+                specialtyList.add(specialty);
+            }
         }
-
-        assert cur != null;
         cur.close();
         close();
+        return specialtyList;
     }
 
     private static final String TABLE_EMPLOYEES = "employees_table";
-    public static final String COLUMN_EMPLOYEE_ID = "worker_id";
     public static final String COLUMN_FNAME = "worker_fname";
     public static final String COLUMN_LNAME = "worker_lname";
     public static final String COLUMN_BITHDAY = "worker_bithday";
@@ -117,21 +112,22 @@ public class DBAdapter {
     public static final String COLUMN_SPECIALTY = "worker_specialty";
 
     private static String[] GET_ALL_WORKERS() {
-        return new String[]{COLUMN_AUTO_INCREMENT_ID, COLUMN_EMPLOYEE_ID, COLUMN_FNAME,
+        return new String[]{COLUMN_AUTO_INCREMENT_ID, COLUMN_FNAME,
                 COLUMN_LNAME, COLUMN_BITHDAY, COLUMN_AGE, COLUMN_AVATARLINK, COLUMN_SPECIALTY};
     }
 
     private static final String CREATE_EMPLOYEES_TABLE = "create table "
             + TABLE_EMPLOYEES + "(" + COLUMN_AUTO_INCREMENT_ID + " integer primary key autoincrement, "
-            + COLUMN_EMPLOYEE_ID + " text not null, "
             + COLUMN_FNAME + " text, "
             + COLUMN_LNAME + " text, "
             + COLUMN_BITHDAY + " text, "
             + COLUMN_AGE + " integer, "
+            + COLUMN_AVATARLINK + " text, "
             + COLUMN_SPECIALTY + " integer);";
 
     public void insertWorker(Worker worker) {
         open();
+        Log.d(TAG, "DATABASE_insertWorker");
         ContentValues initialValues = Worker.getContentValues(worker);
         boolean var = db.insert(TABLE_EMPLOYEES, null, initialValues) > 0;
         if (var) {
@@ -142,56 +138,60 @@ public class DBAdapter {
         close();
     }
 
-    public ArrayList<Worker> getAllWorkersBySpecialtyId(String specialtyId) {
+    private void logCursor(Cursor cursor) {
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                String str;
+                do {
+                    str = "";
+                    for (String cn : cursor.getColumnNames()) {
+                        str = str.concat(cn + " = " + cursor.getString(cursor.getColumnIndex(cn)) + "; ");
+                    }
+                    Log.d(TAG + "In logCursor", str);
+                } while (cursor.moveToNext());
+            }
+        } else Log.d(TAG, "Cursor is null");
+    }
 
+    public ArrayList<Worker> getAllWorkersBySpecialtyId(String specialtyId) {
         ArrayList<Worker> employeesList = new ArrayList<>();
         int columnIndex = 3;
         open();
         Cursor cur = db.query(TABLE_EMPLOYEES, GET_ALL_WORKERS(), COLUMN_SPECIALTY + " = ?", new String[]{specialtyId}, null, null, null);
-
         if (cur.moveToFirst()) {
             for (int i = 0; i < cur.getCount(); i++) {
                 Worker worker = new Worker();
                 worker.setF_name(cur.getColumnName(columnIndex));
-                Log.d(TAG, "GET_DATA_setF_name: " + cur.getColumnName(columnIndex));
+                //Log.d(TAG, "GET_DATA_setF_name: " + cur.getColumnName(columnIndex));
                 worker.setL_name(cur.getColumnName(columnIndex));
                 worker.setBithday(cur.getColumnName(columnIndex));
                 worker.setAge(cur.getInt(columnIndex));
                 worker.setAvatarLink(cur.getColumnName(columnIndex));
                 worker.setSpecialty(cur.getInt(columnIndex));
                 cur.moveToNext();
-                Log.d(TAG, "GET_DATA_WORKER: " + worker.toString());
+                //Log.d(TAG, "GET_DATA_WORKER: " + worker.toString());
             }
         }
-
-
-        /*if (cur != null && cur.getCount() > 0) {
-            cur.getColumnName()
-            mDbListener.onOperationSuccess(TABLE_EMPLOYEES, actionGetData, cur);
-        } else {
-            mDbListener.onOperationFailed(TABLE_EMPLOYEES, actionGetData);
-        }*/
-
-        if (cur != null) {
-            cur.close();
-        }
+        cur.close();
         close();
         return employeesList;
     }
 
-    /*public void getAllData() {
+    private void getAllData() {
         open();
-        Cursor cur = db.query(TABLE_NAME, GET_ALL_DATA(), null, null, null, null, null);
+        //Log.d(TAG, "getAllData");
+        Cursor cur = db.query(TABLE_SPECIALTY, GET_ALL_SPECIALTY(), null, null, null, null, null);
+        //logCursor(cur);
         if (cur != null && cur.getCount() > 0) {
-            mDbListener.onOperationSuccess(TABLE_NAME, actionGetAllData, cur);
+            mDbListener.onOperationSuccess(TABLE_SPECIALTY, actionGetData, cur);
         } else {
-            mDbListener.onOperationFailed(TABLE_NAME, actionGetAllData);
+            mDbListener.onOperationFailed(TABLE_SPECIALTY, actionGetData);
         }
 
         assert cur != null;
         cur.close();
         close();
-    }*/
+    }
 
     /*public void deleteAllData() {
         open();
@@ -218,15 +218,15 @@ public class DBAdapter {
     }*/
 
     // ---updates a data details---
-    /*public void updateData(Worker worker) {
+    public void updateData(Worker worker) {
         open();
         ContentValues initialValues = Worker.getContentValues(worker);
-        boolean var = db.update(TABLE_NAME, initialValues, COLUMN_USER_ID + "=" + worker.getUserId(), null) > 0;
+        boolean var = db.update(TABLE_EMPLOYEES, initialValues, COLUMN_FNAME + "=" + worker.getF_name(), null) > 0;
         if (var) {
-            mDbListener.onOperationSuccess(TABLE_NAME, actionUpdate, object);
+            mDbListener.onOperationSuccess(TABLE_EMPLOYEES, actionUpdate, object);
         } else {
-            mDbListener.onOperationFailed(TABLE_NAME, actionUpdate);
+            mDbListener.onOperationFailed(TABLE_EMPLOYEES, actionUpdate);
         }
         close();
-    }*/
+    }
 }

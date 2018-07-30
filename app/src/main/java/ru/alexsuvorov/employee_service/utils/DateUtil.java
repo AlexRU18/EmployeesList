@@ -40,7 +40,7 @@ public class DateUtil {
         try {
             date = sdf.parse(bithday);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         if (date == null) return 0;
 
