@@ -48,12 +48,6 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
         } else {
             Toast.makeText(this, "No Network Connection", Toast.LENGTH_LONG).show();
         }
-        SpecialtyListFragment employeesListFragment = new SpecialtyListFragment();
-        FragmentManager fManager = getSupportFragmentManager();
-        fManager.beginTransaction()
-                .addToBackStack(null)
-                .add(R.id.fragmentContainer, employeesListFragment)
-                .commit();
     }
 
     @Override
@@ -96,7 +90,7 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                         for (int i = 0; i < response.length(); i++) {
                             String workerFName = response.getJSONObject(i).getString("f_name");
                             String workerLName = response.getJSONObject(i).getString("l_name");
-                            String workerBithday = response.getJSONObject(i).getString("birthday");
+                            String bithdayDateResponse = response.getJSONObject(i).getString("birthday");
                             String workerAvatarUrl = response.getJSONObject(i).getString("avatr_url");
                             int specialtyId = response.getJSONObject(i)
                                     .getJSONArray("specialty")
@@ -108,18 +102,18 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                                     .getString("name");
                             Specialty specialty = new Specialty(specialtyId, specialtyName);
                             set.add(specialty);
+
                             Worker worker = new Worker();
                             worker.setF_name(workerFName);
                             worker.setL_name(workerLName);
+                            String workerBithday = DateUtil.validDateString(bithdayDateResponse);
                             worker.setBithday(workerBithday);
-                            worker.setAge(DateUtil.calculateAge(workerBithday));  //!!!!!!!!!!!!!!
+                            int workerAge = DateUtil.calculateAge(workerBithday);
+                            worker.setAge(workerAge);
                             worker.setAvatarLink(workerAvatarUrl);
                             worker.setSpecialty(specialtyId);
                             workerList.add(worker);
-                            mDbAdapter.insertWorker(worker);
-                        }
-                        for (Specialty specialty : specialtyList = new ArrayList<>(set)) {
-                            mDbAdapter.insertSpecialty(specialty);
+                            //mDbAdapter.insertWorker(worker);
                         }
                     } catch (final JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -135,58 +129,18 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             if (mContext != null) {
-                /*SpecialtyListAdapter adapter = new SpecialtyListAdapter(this.mContext, R.layout.specialty_list,
-                        specialtyList = new ArrayList<>(set));
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();*/
-
-
-
-                /*dManager = new DBManager(mContext);
-                SQLiteDatabase sqLiteDatabase = dManager.getWritableDatabase();
-                Cursor cursor;
-
-                for (int i = 0; i < specialtyList.size(); i++) {
-                    contentValues.clear();
-                    contentValues.put("id", specialtyList.get(i).getSpecId());
-                    contentValues.put("name", specialtyList.get(i).getSpecName());
-                    sqLiteDatabase.insert("specialty", null, contentValues);
+                for (Specialty specialty : set) {
+                    mDbAdapter.insertSpecialty(specialty);
                 }
-
-                sqLiteDatabase.execSQL("create table employees ("
-                        + "id integer primary key autoincrement, "
-                        + "fname text, "
-                        + "lname text, "
-                        + "bithday text, "
-                        + "age integer, "
-                        + "avatarLink text, "
-                        + "specialty integer"
-                        + ");");
-
-                for (int i = 0; i < workerList.size(); i++) {
-                    contentValues.clear();
-                    contentValues.put("fname", workerList.get(i).getF_name());
-                    contentValues.put("lname", workerList.get(i).getL_name());
-                    contentValues.put("bithday", workerList.get(i).getBithday());
-                    contentValues.put("age", workerList.get(i).getAge());
-                    contentValues.put("avatarLink", workerList.get(i).getAvatarLink());
-                    contentValues.put("specialty", workerList.get(i).getSpecialty());
-                    sqLiteDatabase.insert("employees", null, contentValues);
+                for (Worker worker : workerList) {
+                    mDbAdapter.insertWorker(worker);
                 }
-
-                //Log.d(TAG, "---Table specialty---");
-                cursor = sqLiteDatabase.query("specialty", null, null, null, null, null, null);
-                //logCursor(cursor);
-                cursor.close();
-                Log.d(TAG, "--- ---");
-
-                //Log.d(TAG, "---Table employees---");
-                cursor = sqLiteDatabase.query("employees", null, null, null, null, null, null);
-                //logCursor(cursor);
-                cursor.close();
-                Log.d(TAG, "--- ---");
-                dManager.close();*/
-
+                SpecialtyListFragment employeesListFragment = new SpecialtyListFragment();
+                FragmentManager fManager = getSupportFragmentManager();
+                fManager.beginTransaction()
+                        .addToBackStack(null)
+                        .add(R.id.fragmentContainer, employeesListFragment)
+                        .commit();
                 pdialog.dismiss();
             }
         }

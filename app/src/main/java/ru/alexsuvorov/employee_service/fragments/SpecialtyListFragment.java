@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,27 +34,30 @@ public class SpecialtyListFragment extends Fragment {
                 container, false);
         specialtyList = new ArrayList<>();
         dbAdapter = new DBAdapter(this.getContext(), employeeService);
+        specialtyList = dbAdapter.getAllSpecialty();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        ListView listView = view.findViewById(R.id.spec_list);
-        specialtyList = dbAdapter.getAllSpecialty();
+        final ListView specialtyListView = view.findViewById(R.id.spec_list);
         SpecialtyListAdapter adapter = new SpecialtyListAdapter(this.getContext(), R.layout.specialty_list,
                 specialtyList);
-        listView.setAdapter(adapter);
+        specialtyListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        listView.setOnItemClickListener(
+        specialtyListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> arg0, View view,
                                             int position, long id) {
                         EmployeesListFragment employeesListFragment = new EmployeesListFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putInt("specialty_position", position);
+                        int specialtyId = specialtyList.get(position).getSpecId();
+                        bundle.putInt("specialty_id", specialtyId);
+                        Toast toast = Toast.makeText(getContext(), "Position is: " + position, Toast.LENGTH_LONG);
+                        toast.show();
                         employeesListFragment.setArguments(bundle);
                         fragmentManager = getFragmentManager();  //Support?
                         fragmentManager.beginTransaction()

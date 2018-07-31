@@ -3,7 +3,6 @@ package ru.alexsuvorov.employee_service.model;
 import android.content.ContentValues;
 
 import ru.alexsuvorov.employee_service.db.DBAdapter;
-import ru.alexsuvorov.employee_service.utils.DateUtil;
 
 public class Worker {
     final String TAG = getClass().getSimpleName();
@@ -45,7 +44,6 @@ public class Worker {
     }
 
     public void setBithday(String bithday) {
-        DateUtil.validDateString(bithday);
         this.bithday = bithday;
     }
 
@@ -88,7 +86,7 @@ public class Worker {
         if (worker.getAvatarLink() != null) {
             initialValues.put(DBAdapter.COLUMN_AVATARLINK, worker.getAvatarLink()); //COLUMN
         }
-        initialValues.put(DBAdapter.COLUMN_SPECIALTY, worker.getSpecialty()); //COLUMN
+        initialValues.put(DBAdapter.COLUMN_WSPECIALTY, worker.getSpecialty()); //COLUMN
         return initialValues;
     }
 
