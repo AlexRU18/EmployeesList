@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ru.alexsuvorov.employee_service.db.DBAdapter;
-import ru.alexsuvorov.employee_service.db.onDbListeners;
 import ru.alexsuvorov.employee_service.fragments.SpecialtyListFragment;
 import ru.alexsuvorov.employee_service.model.Specialty;
 import ru.alexsuvorov.employee_service.model.Worker;
@@ -28,12 +27,10 @@ import ru.alexsuvorov.employee_service.utils.DateUtil;
 import ru.alexsuvorov.employee_service.utils.HttpHandler;
 import ru.alexsuvorov.employee_service.utils.Utils;
 
-public class EmployeeService extends AppCompatActivity implements onDbListeners {
+public class EmployeeService extends AppCompatActivity {
     private static final String URL = "http://gitlab.65apps.com/65gb/static/raw/master/testTask.json";
-    ArrayList<Specialty> specialtyList = new ArrayList<>();
     Set<Specialty> set = new HashSet<>();
     ArrayList<Worker> workerList = new ArrayList<>();
-    final String TAG = getClass().getSimpleName();
     public DBAdapter mDbAdapter;
     FrameLayout container;
 
@@ -41,23 +38,13 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        mDbAdapter = new DBAdapter(this, this);
+        mDbAdapter = new DBAdapter(this);
         container = findViewById(R.id.fragmentContainer);
         if (Utils.isNetworkAvailable(this)) {
             new DataLoader(this).execute(URL);
         } else {
             Toast.makeText(this, "No Network Connection", Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void onOperationSuccess(String tableName, int operation, Object obj) {
-
-    }
-
-    @Override
-    public void onOperationFailed(String tableName, int operation) {
-
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -90,7 +77,7 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                         for (int i = 0; i < response.length(); i++) {
                             String workerFName = response.getJSONObject(i).getString("f_name");
                             String workerLName = response.getJSONObject(i).getString("l_name");
-                            String bithdayDateResponse = response.getJSONObject(i).getString("birthday");
+                            String birthdayDateResponse = response.getJSONObject(i).getString("birthday");
                             String workerAvatarUrl = response.getJSONObject(i).getString("avatr_url");
                             int specialtyId = response.getJSONObject(i)
                                     .getJSONArray("specialty")
@@ -102,18 +89,16 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                                     .getString("name");
                             Specialty specialty = new Specialty(specialtyId, specialtyName);
                             set.add(specialty);
-
                             Worker worker = new Worker();
                             worker.setF_name(workerFName);
                             worker.setL_name(workerLName);
-                            String workerBithday = DateUtil.validDateString(bithdayDateResponse);
-                            worker.setBithday(workerBithday);
-                            int workerAge = DateUtil.calculateAge(workerBithday);
+                            String workerBirthday = DateUtil.validDateString(birthdayDateResponse);
+                            worker.setBirthday(workerBirthday);
+                            int workerAge = DateUtil.calculateAge(workerBirthday);
                             worker.setAge(workerAge);
                             worker.setAvatarLink(workerAvatarUrl);
                             worker.setSpecialty(specialtyId);
                             workerList.add(worker);
-                            //mDbAdapter.insertWorker(worker);
                         }
                     } catch (final JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -138,7 +123,6 @@ public class EmployeeService extends AppCompatActivity implements onDbListeners 
                 SpecialtyListFragment employeesListFragment = new SpecialtyListFragment();
                 FragmentManager fManager = getSupportFragmentManager();
                 fManager.beginTransaction()
-                        .addToBackStack(null)
                         .add(R.id.fragmentContainer, employeesListFragment)
                         .commit();
                 pdialog.dismiss();

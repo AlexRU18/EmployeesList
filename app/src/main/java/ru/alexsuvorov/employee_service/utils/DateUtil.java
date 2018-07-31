@@ -15,7 +15,6 @@ public class DateUtil {
         SimpleDateFormat sdf;
         final String RU_FORMAT = "dd.MM.yyyy";
         String output = "-";
-
         for (String format : dateFormats) {
             sdf = new SimpleDateFormat(format, new Locale("ru"));
             sdf.setLenient(false);
@@ -40,7 +39,6 @@ public class DateUtil {
         try {
             date = sdf.parse(bithday);
         } catch (ParseException e) {
-            //e.printStackTrace();
         }
         if (date == null) return 0;
 

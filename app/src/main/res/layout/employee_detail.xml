@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/employee_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -18,51 +18,92 @@
 
     <TextView
         android:id="@+id/employee_fname"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/employee_image"
-        app:layout_constraintTop_toTopOf="@+id/employee_image" />
+        app:layout_constraintStart_toEndOf="@+id/employee_name_label"
+        app:layout_constraintTop_toTopOf="@+id/employee_image"
+        tools:text="Alex" />
 
     <TextView
         android:id="@+id/employee_lname"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/employee_fname"
-        app:layout_constraintTop_toTopOf="@+id/employee_image" />
+        app:layout_constraintTop_toTopOf="@+id/employee_image"
+        tools:text="Suvorov," />
 
     <TextView
-        android:id="@+id/employee_bithday"
-        android:layout_width="50dp"
+        android:id="@+id/employee_birthday"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/employee_image"
-        app:layout_constraintTop_toBottomOf="@+id/employee_fname" />
+        app:layout_constraintStart_toEndOf="@+id/employee_birthday_label"
+        app:layout_constraintTop_toBottomOf="@+id/employee_fname"
+        tools:text="22.12.1994" />
 
     <TextView
         android:id="@+id/employee_specialty"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/employee_image"
-        app:layout_constraintTop_toBottomOf="@+id/employee_bithday" />
+        app:layout_constraintStart_toEndOf="@+id/employee_specialty_label"
+        app:layout_constraintTop_toBottomOf="@+id/employee_birthday"
+        tools:text="Разработчик" />
 
     <TextView
         android:id="@+id/employee_age"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/employee_lname"
+        app:layout_constraintTop_toTopOf="@+id/employee_image"
+        tools:text="23" />
+
+    <TextView
+        android:id="@+id/employee_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/employees_list_name_label"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/employee_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/employee_birthday_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/employee_lname"
-        app:layout_constraintTop_toTopOf="@+id/employee_image" />
+        android:text="@string/employees_birthday_label"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/employee_image"
+        app:layout_constraintTop_toBottomOf="@+id/employee_name_label"
+        tools:text="Birthday:" />
+
+    <TextView
+        android:id="@+id/employee_specialty_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"
+        android:text="@string/employees_specialty_label"
+        app:layout_constraintStart_toEndOf="@+id/employee_image"
+        app:layout_constraintTop_toBottomOf="@+id/employee_birthday_label"
+        tools:text="Специальность:" />
 </android.support.constraint.ConstraintLayout>

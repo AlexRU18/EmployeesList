@@ -2,13 +2,15 @@ package ru.alexsuvorov.employee_service.model;
 
 import android.content.ContentValues;
 
+import java.io.Serializable;
+
 import ru.alexsuvorov.employee_service.db.DBAdapter;
 
-public class Worker {
+public class Worker implements Serializable {
     final String TAG = getClass().getSimpleName();
     private String f_name;
     private String l_name;
-    private String bithday;
+    private String birthday;
     private int age;
     private String avatarLink;
     private int specialty;
@@ -39,12 +41,12 @@ public class Worker {
         this.l_name = new String(charLname);
     }
 
-    public String getBithday() {
-        return bithday;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setBithday(String bithday) {
-        this.bithday = bithday;
+    public void setBirthday(String bithday) {
+        this.birthday = bithday;
     }
 
     public int getAge() {
@@ -79,8 +81,8 @@ public class Worker {
         if (worker.getL_name() != null) {
             initialValues.put(DBAdapter.COLUMN_LNAME, worker.getL_name()); //COLUMN
         }
-        if (worker.getBithday() != null) {
-            initialValues.put(DBAdapter.COLUMN_BITHDAY, worker.getBithday()); //COLUMN
+        if (worker.getBirthday() != null) {
+            initialValues.put(DBAdapter.COLUMN_BIRTHDAY, worker.getBirthday()); //COLUMN
         }
         initialValues.put(DBAdapter.COLUMN_AGE, worker.getAge()); //COLUMN
         if (worker.getAvatarLink() != null) {
@@ -96,7 +98,7 @@ public class Worker {
                 "TAG='" + TAG + '\'' +
                 ", f_name='" + f_name + '\'' +
                 ", l_name='" + l_name + '\'' +
-                ", bithday='" + bithday + '\'' +
+                ", bithday='" + birthday + '\'' +
                 ", age=" + age +
                 ", avatarLink='" + avatarLink + '\'' +
                 ", specialty=" + specialty +

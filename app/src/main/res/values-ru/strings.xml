@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="spec_list_label">Специальности в нашей фирме</string>
+    <string name="spec_list_label">Специальности в нашей фирме:</string>
     <string name="app_name">Список специальностей</string>
-    <string name="employees_list_label">Сотрудники по этой специальности</string>
+    <string name="employees_list_label">Сотрудники на этой специальности:</string>
+    <string name="employees_list_age_label">Возраст: </string>
+    <string name="employees_list_name_label">Имя: </string>
+    <string name="employees_birthday_label">День рождения: </string>
+    <string name="employees_specialty_label">Специальность: </string>
 </resources>

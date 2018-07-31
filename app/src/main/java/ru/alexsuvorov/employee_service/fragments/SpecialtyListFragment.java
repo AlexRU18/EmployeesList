@@ -10,11 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import ru.alexsuvorov.employee_service.EmployeeService;
 import ru.alexsuvorov.employee_service.R;
 import ru.alexsuvorov.employee_service.adapters.SpecialtyListAdapter;
 import ru.alexsuvorov.employee_service.db.DBAdapter;
@@ -23,9 +21,7 @@ import ru.alexsuvorov.employee_service.model.Specialty;
 public class SpecialtyListFragment extends Fragment {
 
     private FragmentManager fragmentManager;
-    private DBAdapter dbAdapter;
     ArrayList<Specialty> specialtyList;
-    EmployeeService employeeService;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -33,14 +29,13 @@ public class SpecialtyListFragment extends Fragment {
         View view = inflater.inflate(R.layout.specialty_list,
                 container, false);
         specialtyList = new ArrayList<>();
-        dbAdapter = new DBAdapter(this.getContext(), employeeService);
+        DBAdapter dbAdapter = new DBAdapter(this.getContext());
         specialtyList = dbAdapter.getAllSpecialty();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         final ListView specialtyListView = view.findViewById(R.id.spec_list);
         SpecialtyListAdapter adapter = new SpecialtyListAdapter(this.getContext(), R.layout.specialty_list,
                 specialtyList);
@@ -56,10 +51,8 @@ public class SpecialtyListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         int specialtyId = specialtyList.get(position).getSpecId();
                         bundle.putInt("specialty_id", specialtyId);
-                        Toast toast = Toast.makeText(getContext(), "Position is: " + position, Toast.LENGTH_LONG);
-                        toast.show();
                         employeesListFragment.setArguments(bundle);
-                        fragmentManager = getFragmentManager();  //Support?
+                        fragmentManager = getFragmentManager();
                         fragmentManager.beginTransaction()
                                 .addToBackStack(null)
                                 .replace(R.id.fragmentContainer, employeesListFragment)

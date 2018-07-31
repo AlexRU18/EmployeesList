@@ -2,5 +2,10 @@
     <string name="app_name">Employees List</string>
     <string name="spec_list_label">Specialties in our firm:</string>
     <string name="spec_id_prefix">ID: %1$s</string>
-    <string name="employees_list_label">List of employees</string>
+    <string name="worker_age_prefix">, %1$s</string>
+    <string name="employees_list_label">List of employees:</string>
+    <string name="employees_list_age_label">Age: </string>
+    <string name="employees_list_name_label">Name: </string>
+    <string name="employees_birthday_label">Birthday</string>
+    <string name="employees_specialty_label">Specialty:</string>
 </resources>

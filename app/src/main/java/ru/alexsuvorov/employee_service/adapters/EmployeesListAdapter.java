@@ -19,8 +19,9 @@ public class EmployeesListAdapter extends ArrayAdapter<Worker> {
         super(context, resource, workers);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
         Worker worker = getItem(position);
 
         if (view == null) {
@@ -31,6 +32,11 @@ public class EmployeesListAdapter extends ArrayAdapter<Worker> {
                 .setText(worker.getF_name());
         ((TextView) view.findViewById(R.id.employee_Lname))
                 .setText(worker.getL_name());
+        if (worker.getAge() == 0) {
+            ((TextView) view.findViewById(R.id.employee_age)).setText("-");
+        } else {
+            ((TextView) view.findViewById(R.id.employee_age)).setText(String.valueOf(worker.getAge()));
+        }
         return view;
     }
 }

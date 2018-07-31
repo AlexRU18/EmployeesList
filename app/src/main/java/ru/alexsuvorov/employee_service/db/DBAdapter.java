@@ -11,7 +11,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import ru.alexsuvorov.employee_service.EmployeeService;
 import ru.alexsuvorov.employee_service.model.Specialty;
 import ru.alexsuvorov.employee_service.model.Worker;
 
@@ -22,14 +21,10 @@ public class DBAdapter {
     private SQLiteDatabase db;
     private static final String DATABASE_NAME = "db";
     private static final String COLUMN_AUTO_INCREMENT_ID = "auto_increment_id";
-    private onDbListeners mDbListener;
-    private static final int actionGetData = 1, actionInsert = 2, actionUpdate = 3, actionDelete = 4, actionDeleteAll = 5;
-    private Object object = null;
     private final String TAG = getClass().getSimpleName();
 
-    public DBAdapter(Context context, EmployeeService listener) {
+    public DBAdapter(Context context) {
         DBHelper = new DatabaseHelper(context);
-        mDbListener = listener;
     }
 
     private class DatabaseHelper extends SQLiteOpenHelper {
@@ -44,7 +39,6 @@ public class DBAdapter {
             db.execSQL(UNIQUE_INDEX_SPECIALTY);
             db.execSQL(CREATE_EMPLOYEES_TABLE);
             db.execSQL(UNIQUE_INDEX_EMPLOYEE);
-            //Log.d(TAG, "DATABASE_ONCREATE");
         }
 
         @Override
@@ -52,7 +46,6 @@ public class DBAdapter {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SPECIALTY);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_EMPLOYEES);
             onCreate(db);
-            Log.d(TAG, "DATABASE_ONUPDATE");
         }
     }
 
@@ -67,7 +60,7 @@ public class DBAdapter {
     private static final String TABLE_EMPLOYEES = "employees_table";
     public static final String COLUMN_FNAME = "worker_fname";
     public static final String COLUMN_LNAME = "worker_lname";
-    public static final String COLUMN_BITHDAY = "worker_bithday";
+    public static final String COLUMN_BIRTHDAY = "worker_birthday";
     public static final String COLUMN_AGE = "worker_age";
     public static final String COLUMN_AVATARLINK = "worker_avatar_link";
     public static final String COLUMN_WSPECIALTY = "worker_specialty";
@@ -83,7 +76,7 @@ public class DBAdapter {
     private static final String UNIQUE_INDEX_SPECIALTY = "CREATE UNIQUE INDEX USPECIALTTY ON " +
             TABLE_SPECIALTY + " (" + COLUMN_SPECIALTY_ID + ", " + COLUMN_SPECIALTY_NAME + ")";
     private static final String UNIQUE_INDEX_EMPLOYEE = "CREATE UNIQUE INDEX UEMPLOYEE ON " +
-            TABLE_EMPLOYEES + " (" + COLUMN_FNAME + ", " + COLUMN_LNAME + ", " + COLUMN_BITHDAY + ", "
+            TABLE_EMPLOYEES + " (" + COLUMN_FNAME + ", " + COLUMN_LNAME + ", " + COLUMN_BIRTHDAY + ", "
             + COLUMN_AGE + ", " + COLUMN_AVATARLINK + ", " + COLUMN_WSPECIALTY + ")";
 
     private static final String CREATE_SPECIALTY_TABLE = "create table "
@@ -93,12 +86,10 @@ public class DBAdapter {
 
     public void insertSpecialty(Specialty specialty) {
         open();
-        //Log.d(TAG, "DATABASE_insertSpecialty");
         ContentValues values = Specialty.getContentValues(specialty);
         try {
             db.insertOrThrow(TABLE_SPECIALTY, null, values);
         } catch (SQLiteConstraintException e) {
-            //Log.d(TAG, "DATABASE_UPDATE_SPECIALTY_VALUES");
             db.update(TABLE_SPECIALTY,
                     values,
                     COLUMN_SPECIALTY_ID + "=? and " +
@@ -120,7 +111,7 @@ public class DBAdapter {
                 specialtyList.add(specialty);
             }
         } else {
-            Log.d(TAG, "No matches");
+            Log.e(TAG, "No matches");
         }
         cur.close();
         close();
@@ -129,35 +120,33 @@ public class DBAdapter {
 
     private static String[] GET_ALL_WORKERS() {
         return new String[]{COLUMN_AUTO_INCREMENT_ID, COLUMN_FNAME,
-                COLUMN_LNAME, COLUMN_BITHDAY, COLUMN_AGE, COLUMN_AVATARLINK, COLUMN_WSPECIALTY};
+                COLUMN_LNAME, COLUMN_BIRTHDAY, COLUMN_AGE, COLUMN_AVATARLINK, COLUMN_WSPECIALTY};
     }
 
     private static final String CREATE_EMPLOYEES_TABLE = "create table "
             + TABLE_EMPLOYEES + "(" + COLUMN_AUTO_INCREMENT_ID + " integer primary key autoincrement, "
             + COLUMN_FNAME + " text, "
             + COLUMN_LNAME + " text, "
-            + COLUMN_BITHDAY + " text, "
+            + COLUMN_BIRTHDAY + " text, "
             + COLUMN_AGE + " integer, "
             + COLUMN_AVATARLINK + " text, "
             + COLUMN_WSPECIALTY + " integer);";
 
     public void insertWorker(Worker worker) {
         open();
-        //Log.d(TAG, "DATABASE_insertWorker");
         ContentValues values = Worker.getContentValues(worker);
         try {
             db.insertOrThrow(TABLE_EMPLOYEES, null, values);
         } catch (SQLiteConstraintException e) {
-            //Log.d(TAG, "DATABASE_UPDATE_WORKER_VALUES");
             db.update(TABLE_EMPLOYEES,
                     values,
                     COLUMN_FNAME + "=? and " +
                             COLUMN_LNAME + "=? and " +
-                            COLUMN_BITHDAY + "=? and " +
+                            COLUMN_BIRTHDAY + "=? and " +
                             COLUMN_AGE + "=? and " +
                             COLUMN_AVATARLINK + "=? and " +
                             COLUMN_WSPECIALTY + "=?",
-                    new String[]{worker.getF_name(), worker.getL_name(), worker.getBithday(),
+                    new String[]{worker.getF_name(), worker.getL_name(), worker.getBirthday(),
                             String.valueOf(worker.getAge()), worker.getAvatarLink(),
                             String.valueOf(worker.getSpecialty())});
         }
@@ -177,12 +166,12 @@ public class DBAdapter {
         if (cur.moveToFirst()) {
             for (int i = 0; i < cur.getCount(); i++) {
                 Worker worker = new Worker();
-                worker.setF_name(cur.getColumnName(1));
-                worker.setL_name(cur.getColumnName(2));
-                worker.setBithday(cur.getColumnName(3));
-                worker.setAge(cur.getInt(4));
-                worker.setAvatarLink(cur.getColumnName(5));
-                worker.setSpecialty(cur.getInt(6));
+                worker.setF_name(cur.getString(cur.getColumnIndex("worker_fname")));
+                worker.setL_name(cur.getString(cur.getColumnIndex("worker_lname")));
+                worker.setBirthday(cur.getString(cur.getColumnIndex("worker_birthday")));
+                worker.setAge(cur.getInt((cur.getColumnIndex("worker_age"))));
+                worker.setAvatarLink(cur.getString(cur.getColumnIndex("worker_avatar_link")));
+                worker.setSpecialty(cur.getInt((cur.getColumnIndex("worker_specialty"))));
                 employeesList.add(worker);
                 cur.moveToNext();
             }
@@ -194,6 +183,27 @@ public class DBAdapter {
         return employeesList;
     }
 
+    public String getSpecialtyNameById(int specialtyId) {
+        open();
+        String specialtyName = null;
+        Cursor cur = db.query(TABLE_SPECIALTY,
+                GET_ALL_SPECIALTY(),
+                COLUMN_SPECIALTY_ID + "=?",
+                new String[]{String.valueOf(specialtyId)},
+                null,
+                null,
+                null);
+        if (cur.moveToFirst()) {
+            for (int i = 0; i < cur.getCount(); i++) {
+                specialtyName = cur.getString(2);
+            }
+        } else {
+            Log.e(TAG, "cant moveToFirst(((((((");
+        }
+        cur.close();
+        close();
+        return specialtyName;
+    }
     /*public void deleteAllData() {
         open();
         db.delete(TABLE_NAME, null, null);

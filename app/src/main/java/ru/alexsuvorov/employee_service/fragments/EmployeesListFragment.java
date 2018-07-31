@@ -5,14 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import ru.alexsuvorov.employee_service.EmployeeService;
 import ru.alexsuvorov.employee_service.R;
 import ru.alexsuvorov.employee_service.adapters.EmployeesListAdapter;
 import ru.alexsuvorov.employee_service.db.DBAdapter;
@@ -22,7 +23,7 @@ public class EmployeesListFragment extends Fragment {
 
     private FragmentManager fragmentManager;
     ArrayList<Worker> workersList;
-    EmployeeService employeeService;
+    Worker worker;
     int position;
 
     @Override
@@ -33,7 +34,7 @@ public class EmployeesListFragment extends Fragment {
         Bundle bundle = getArguments();
         position = bundle.getInt("specialty_id");
         workersList = new ArrayList<>();
-        DBAdapter dbAdapter = new DBAdapter(this.getContext(), employeeService);
+        DBAdapter dbAdapter = new DBAdapter(this.getContext());
         workersList = dbAdapter.getWorkersBySpecialtyId(position);
         return view;
     }
@@ -42,12 +43,31 @@ public class EmployeesListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ListView workersListView = view.findViewById(R.id.employees_listView);
-        EmployeesListAdapter adapter = new EmployeesListAdapter(this.getContext(), R.layout.specialty_list,
+        EmployeesListAdapter adapter = new EmployeesListAdapter(this.getContext(), R.layout.employees_list,
                 workersList);
         workersListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
-        /*ArrayAdapter<Worker> adapter = new EmployeesListAdapter(this.getContext(), );
-        setListAdapter(adapter);*/
+        workersListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View view,
+                                            int position, long id) {
+                        EmployeeDetail employeeDetail = new EmployeeDetail();
+                        Bundle bundle = new Bundle();
+                        worker = workersList.get(position);
+                        if (worker != null) {
+                            bundle.putSerializable("worker", worker);
+                        } else {
+                            Log.e("worker", "is null");
+                        }
+                        employeeDetail.setArguments(bundle);
+                        fragmentManager = getFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .addToBackStack(null)
+                                .replace(R.id.fragmentContainer, employeeDetail)
+                                .commit();
+                    }
+                }
+        );
     }
 }
