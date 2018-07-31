@@ -22,3 +22,9 @@
 Минимальная версия Android: 4.0
 
 Разрешается использовать любые сторонние библиотеки.
+
+Screenshots:
+
+![Alt text](https://pp.userapi.com/c848732/v848732455/3d8d3/8NHu6saPaPo.jpg "Main fragment")
+![Alt text](https://pp.userapi.com/c848732/v848732455/3d8da/CB9yAEhVLLg.jpg "Employees List 1")
+![Alt text](https://pp.userapi.com/c848732/v848732455/3d8e1/t_Au2DOp3_M.jpg "Detail Fragment")
