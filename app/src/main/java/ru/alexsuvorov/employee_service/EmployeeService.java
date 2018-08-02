@@ -1,37 +1,30 @@
 package ru.alexsuvorov.employee_service;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import ru.alexsuvorov.employee_service.api.App;
 import ru.alexsuvorov.employee_service.db.DBAdapter;
 import ru.alexsuvorov.employee_service.fragments.SpecialtyListFragment;
-import ru.alexsuvorov.employee_service.model.Specialty;
-import ru.alexsuvorov.employee_service.model.Worker;
-import ru.alexsuvorov.employee_service.utils.DateUtil;
-import ru.alexsuvorov.employee_service.utils.HttpHandler;
+import ru.alexsuvorov.employee_service.model.EmployeeModel;
 import ru.alexsuvorov.employee_service.utils.Utils;
 
 public class EmployeeService extends AppCompatActivity {
-    private static final String URL = "http://gitlab.65apps.com/65gb/static/raw/master/testTask.json";
-    Set<Specialty> set = new HashSet<>();
-    ArrayList<Worker> workerList = new ArrayList<>();
+    //private static final String URL = "http://gitlab.65apps.com/65gb/static/raw/master/testTask.json";
+    //Set<Specialty> set = new HashSet<>();
+    ArrayList<EmployeeModel> workerList = new ArrayList<>();
     public DBAdapter mDbAdapter;
+    private ProgressDialog pdialog;
     FrameLayout container;
 
     @Override
@@ -41,12 +34,37 @@ public class EmployeeService extends AppCompatActivity {
         mDbAdapter = new DBAdapter(this);
         container = findViewById(R.id.fragmentContainer);
         if (Utils.isNetworkAvailable(this)) {
-            new DataLoader(this).execute(URL);
+            pdialog = ProgressDialog.show(this, "Загрузка", "Пожалуйста, подождите");
+
+            App.getApi().getData("f_name", "l_name").enqueue(new Callback<List<EmployeeModel>>() {
+
+                @Override
+                public void onResponse(Call<List<EmployeeModel>> call, Response<List<EmployeeModel>> response) {
+                    workerList.addAll(response.body());
+                    //recyclerView.getAdapter().notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(Call<List<EmployeeModel>> call, Throwable t) {
+                    //Обработка ошибки обращения к серверу
+                    Toast.makeText(EmployeeService.this, "No Network Connection", Toast.LENGTH_LONG).show();
+                }
+            });
+            for (EmployeeModel employee : workerList) {
+                //mDbAdapter.insertWorker(employee);
+            }
+            SpecialtyListFragment employeesListFragment = new SpecialtyListFragment();
+            FragmentManager fManager = getSupportFragmentManager();
+            fManager.beginTransaction()
+                    .add(R.id.fragmentContainer, employeesListFragment)
+                    .commit();
+            pdialog.dismiss();
+
         } else {
             Toast.makeText(this, "No Network Connection", Toast.LENGTH_LONG).show();
         }
     }
-
+/*
     @SuppressLint("StaticFieldLeak")
     class DataLoader extends AsyncTask<String, Void, Void> {
 
@@ -128,5 +146,5 @@ public class EmployeeService extends AppCompatActivity {
                 pdialog.dismiss();
             }
         }
-    }
+    }*/
 }
