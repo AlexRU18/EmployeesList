@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 public class Utils {
     public static boolean isNetworkAvailable(Activity activity) {
@@ -22,6 +23,10 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static void Log(String input) {
+        Log.d("LOG: ", input);
     }
 
 }

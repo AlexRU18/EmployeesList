@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import ru.alexsuvorov.employee_service.R;
 import ru.alexsuvorov.employee_service.adapters.EmployeesListAdapter;
 import ru.alexsuvorov.employee_service.db.DBAdapter;
-import ru.alexsuvorov.employee_service.model.Worker;
+import ru.alexsuvorov.employee_service.model.Employee;
 
 public class EmployeesListFragment extends Fragment {
 
     private FragmentManager fragmentManager;
-    ArrayList<Worker> workersList;
-    Worker worker;
+    ArrayList<Employee> workersList;
+    Employee employee;
     int position;
 
     @Override
@@ -54,11 +54,11 @@ public class EmployeesListFragment extends Fragment {
                                             int position, long id) {
                         EmployeeDetail employeeDetail = new EmployeeDetail();
                         Bundle bundle = new Bundle();
-                        worker = workersList.get(position);
-                        if (worker != null) {
-                            bundle.putSerializable("worker", worker);
+                        employee = workersList.get(position);
+                        if (employee != null) {
+                            bundle.putSerializable("employee", employee);
                         } else {
-                            Log.e("worker", "is null");
+                            Log.e("employee", "is null");
                         }
                         employeeDetail.setArguments(bundle);
                         fragmentManager = getFragmentManager();

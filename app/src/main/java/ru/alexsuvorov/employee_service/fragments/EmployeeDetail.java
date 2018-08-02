@@ -15,13 +15,13 @@ import com.squareup.picasso.Picasso;
 
 import ru.alexsuvorov.employee_service.R;
 import ru.alexsuvorov.employee_service.db.DBAdapter;
-import ru.alexsuvorov.employee_service.model.Worker;
+import ru.alexsuvorov.employee_service.model.Employee;
 
 public class EmployeeDetail extends Fragment {
 
     private TextView fname, lname, birthday, specialty, age;
     private ImageView avatarImage;
-    private Worker worker;
+    private Employee employee;
     DBAdapter dbAdapter;
     Resources res;
 
@@ -31,7 +31,7 @@ public class EmployeeDetail extends Fragment {
         View view = inflater.inflate(R.layout.employee_detail,
                 container, false);
         Bundle bundle = getArguments();
-        worker = (Worker) bundle.getSerializable("worker");
+        employee = (Employee) bundle.getSerializable("employee");
         dbAdapter = new DBAdapter(this.getContext());
         fname = view.findViewById(R.id.employee_fname);
         lname = view.findViewById(R.id.employee_lname);
@@ -46,14 +46,14 @@ public class EmployeeDetail extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fname.setText(worker.getF_name());
-        lname.setText(worker.getL_name());
-        if (worker.getAge() != 0) {
-            age.setText(String.format(res.getString(R.string.worker_age_prefix), String.valueOf(worker.getAge())));
+        fname.setText(employee.getF_name());
+        lname.setText(employee.getL_name());
+        if (employee.getAge() != 0) {
+            age.setText(String.format(res.getString(R.string.worker_age_prefix), String.valueOf(employee.getAge())));
         }
-        birthday.setText(String.valueOf(worker.getBirthday()));
-        specialty.setText(dbAdapter.getSpecialtyNameById(worker.getSpecialty()));
-        String avatarLink = worker.getAvatarLink();
+        birthday.setText(String.valueOf(employee.getBirthday()));
+        specialty.setText(dbAdapter.getSpecialtyNameById(employee.getSpecialty()));
+        String avatarLink = employee.getAvatarLink();
         //Не нашёл способ обрабатывать пустые ссылки
         if (avatarLink == null || avatarLink.isEmpty()) {
             Picasso.get()

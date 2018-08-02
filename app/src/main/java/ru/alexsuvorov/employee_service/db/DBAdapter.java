@@ -11,8 +11,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import ru.alexsuvorov.employee_service.model.Employee;
 import ru.alexsuvorov.employee_service.model.Specialty;
-import ru.alexsuvorov.employee_service.model.Worker;
 
 public class DBAdapter {
 
@@ -132,9 +132,9 @@ public class DBAdapter {
             + COLUMN_AVATARLINK + " text, "
             + COLUMN_WSPECIALTY + " integer);";
 
-    public void insertWorker(Worker worker) {
+    public void insertWorker(Employee employee) {
         open();
-        ContentValues values = Worker.getContentValues(worker);
+        ContentValues values = Employee.getContentValues(employee);
         try {
             db.insertOrThrow(TABLE_EMPLOYEES, null, values);
         } catch (SQLiteConstraintException e) {
@@ -146,15 +146,15 @@ public class DBAdapter {
                             COLUMN_AGE + "=? and " +
                             COLUMN_AVATARLINK + "=? and " +
                             COLUMN_WSPECIALTY + "=?",
-                    new String[]{worker.getF_name(), worker.getL_name(), worker.getBirthday(),
-                            String.valueOf(worker.getAge()), worker.getAvatarLink(),
-                            String.valueOf(worker.getSpecialty())});
+                    new String[]{employee.getF_name(), employee.getL_name(), employee.getBirthday(),
+                            String.valueOf(employee.getAge()), employee.getAvatarLink(),
+                            String.valueOf(employee.getSpecialty())});
         }
         close();
     }
 
-    public ArrayList<Worker> getWorkersBySpecialtyId(int specialtyId) {
-        ArrayList<Worker> employeesList = new ArrayList<>();
+    public ArrayList<Employee> getWorkersBySpecialtyId(int specialtyId) {
+        ArrayList<Employee> employeesList = new ArrayList<>();
         open();
         Cursor cur = db.query(TABLE_EMPLOYEES,
                 GET_ALL_WORKERS(),
@@ -165,14 +165,14 @@ public class DBAdapter {
                 null);
         if (cur.moveToFirst()) {
             for (int i = 0; i < cur.getCount(); i++) {
-                Worker worker = new Worker();
-                worker.setF_name(cur.getString(cur.getColumnIndex("worker_fname")));
-                worker.setL_name(cur.getString(cur.getColumnIndex("worker_lname")));
-                worker.setBirthday(cur.getString(cur.getColumnIndex("worker_birthday")));
-                worker.setAge(cur.getInt((cur.getColumnIndex("worker_age"))));
-                worker.setAvatarLink(cur.getString(cur.getColumnIndex("worker_avatar_link")));
-                worker.setSpecialty(cur.getInt((cur.getColumnIndex("worker_specialty"))));
-                employeesList.add(worker);
+                Employee employee = new Employee();
+                employee.setF_name(cur.getString(cur.getColumnIndex("worker_fname")));
+                employee.setL_name(cur.getString(cur.getColumnIndex("worker_lname")));
+                employee.setBirthday(cur.getString(cur.getColumnIndex("worker_birthday")));
+                employee.setAge(cur.getInt((cur.getColumnIndex("worker_age"))));
+                employee.setAvatarLink(cur.getString(cur.getColumnIndex("worker_avatar_link")));
+                employee.setSpecialty(cur.getInt((cur.getColumnIndex("worker_specialty"))));
+                employeesList.add(employee);
                 cur.moveToNext();
             }
         } else {
