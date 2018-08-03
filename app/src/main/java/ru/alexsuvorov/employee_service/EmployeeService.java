@@ -8,6 +8,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,12 +19,14 @@ import ru.alexsuvorov.employee_service.db.DBAdapter;
 import ru.alexsuvorov.employee_service.fragments.SpecialtyListFragment;
 import ru.alexsuvorov.employee_service.model.Employee;
 import ru.alexsuvorov.employee_service.model.ResponseModel;
+import ru.alexsuvorov.employee_service.model.Specialty;
 import ru.alexsuvorov.employee_service.utils.Utils;
 
 public class EmployeeService extends AppCompatActivity {
     //private static final String URL = "http://gitlab.65apps.com/65gb/static/raw/master/testTask.json";
-    //Set<Specialty> set = new HashSet<>();
+    Set<Specialty> set = new HashSet<>();
     ArrayList<Employee> employeeList = new ArrayList<>();
+    ArrayList<Specialty> specialtyList = new ArrayList<>(set);
     public DBAdapter mDbAdapter;
     private ProgressDialog pdialog;
     FrameLayout container;
@@ -43,7 +47,23 @@ public class EmployeeService extends AppCompatActivity {
                         employeeList.addAll(response.body().getResponse());
                         for (int j = 0; j < employeeList.size(); j++) {
                             Utils.Log("List " + employeeList.get(j).getF_name());
+                            Employee employee = new Employee();
+                            employee.setF_name(employeeList.get(j).getF_name());
+                            employee.setL_name(employeeList.get(j).getL_name());
+                            employee.setBirthday(employeeList.get(j).getBirthday());
+                            employee.setAge(employeeList.get(j).getAge());
+                            employee.setAvatarLink(employeeList.get(j).getAvatarLink());
+                            for (int i = 0; i < set.size(); i++) {
+                                Specialty specialty = new Specialty();
+                                specialty.setSpecId(employeeList.get(j).getSpecialty().get(i).getSpecId());
+                                specialty.setSpecName(employeeList.get(j).getSpecialty().get(i).getSpecName());
+                                set.add(specialty);
+                            }
+                            employee.setSpecialty(specialtyList);
                             mDbAdapter.insertWorker(employeeList.get(j));
+                        }
+                        for (Specialty specialty : set) {
+                            mDbAdapter.insertSpecialty(specialty);
                         }
                     } else {
                         Utils.Log("response code " + response.code());
@@ -62,7 +82,6 @@ public class EmployeeService extends AppCompatActivity {
                     .add(R.id.fragmentContainer, employeesListFragment)
                     .commit();
             pdialog.dismiss();
-
         } else {
             Toast.makeText(this, "No Network Connection", Toast.LENGTH_LONG).show();
         }

@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 import ru.alexsuvorov.employee_service.db.DBAdapter;
 
@@ -26,9 +27,9 @@ public class Employee implements Serializable {
     @SerializedName("avatr_url")
     @Expose
     private String avatarLink;
-    private int specialty;
     @SerializedName("specialty")
     @Expose
+    private List<Specialty> specialty = null;
     private final static long serialVersionUID = -8824149947485321362L;
 
     public String getF_name() {
@@ -81,19 +82,11 @@ public class Employee implements Serializable {
         this.avatarLink = avatrUrl;
     }
 
-    /*public List<Specialty> getSpecialty() {
-        return specialty;
-    }*/
-
-    /*public void setSpecialty(List<Specialty> specialty) {
-        this.specialty = specialty;
-    }*/
-
-    public int getSpecialty() {
+    public List<Specialty> getSpecialty() {
         return specialty;
     }
 
-    public void setSpecialty(int specialty) {
+    public void setSpecialty(List<Specialty> specialty) {
         this.specialty = specialty;
     }
 

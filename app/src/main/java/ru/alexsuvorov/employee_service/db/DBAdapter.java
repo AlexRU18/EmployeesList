@@ -130,7 +130,8 @@ public class DBAdapter {
             + COLUMN_BIRTHDAY + " text, "
             + COLUMN_AGE + " integer, "
             + COLUMN_AVATARLINK + " text, "
-            + COLUMN_WSPECIALTY + " integer);";
+            + COLUMN_WSPECIALTY + " integer, "
+            + " FOREIGN KEY (" + COLUMN_SPECIALTY_ID + ") REFERENCES " + TABLE_SPECIALTY + "(" + "UEMPLOYEE" + "));";
 
     public void insertWorker(Employee employee) {
         open();

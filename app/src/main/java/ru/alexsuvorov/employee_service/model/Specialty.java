@@ -21,8 +21,12 @@ public class Specialty implements Serializable {
     private final static long serialVersionUID = 4288061416169200241L;
 
     public Specialty(int specId, String specName) {
+        super();
         this.specId = specId;
         this.specName = specName;
+    }
+
+    public Specialty() {
     }
 
     public int getSpecId() {
