@@ -1,10 +1,8 @@
 package ru.alexsuvorov.employee_service.db;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -12,7 +10,6 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import ru.alexsuvorov.employee_service.model.Employee;
-import ru.alexsuvorov.employee_service.model.Specialty;
 
 public class DBAdapter {
 
@@ -85,7 +82,7 @@ public class DBAdapter {
             + COLUMN_SPECIALTY_NAME + " text not null, "
             + " FOREIGN KEY (" + COLUMN_AUTO_INCREMENT_ID + ") REFERENCES " + TABLE_EMPLOYEES + "(" + "UEMPLOYEE" + "));";
 
-    public void insertSpecialty(Specialty specialty) {
+    /*public void insertSpecialty(Specialty specialty) {
         open();
         ContentValues values = Specialty.getContentValues(specialty);
         try {
@@ -100,7 +97,7 @@ public class DBAdapter {
         }
         close();
     }
-
+*/
     /*public ArrayList<Specialty> getAllSpecialty() {
         ArrayList<Specialty> specialtyList = new ArrayList<>();
         open();

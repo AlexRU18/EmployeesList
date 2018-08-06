@@ -56,7 +56,7 @@ public class EmployeesListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         employee = workersList.get(position);
                         if (employee != null) {
-                            bundle.putSerializable("employee", employee);
+                            //bundle.putSerializable("employee", employee);
                         } else {
                             Log.e("employee", "is null");
                         }

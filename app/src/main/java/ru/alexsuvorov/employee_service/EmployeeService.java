@@ -60,7 +60,7 @@ public class EmployeeService extends AppCompatActivity {
                             employee.setBirthday(employeeList.get(j).getBirthday());
                             employee.setAge(employeeList.get(j).getAge());
                             employee.setAvatarLink(employeeList.get(j).getAvatarLink());
-                            for (int i = 0; i < employeeList.get(j).getSpecialty().size(); i++) {
+                            /*for (int i = 0; i < employeeList.get(j).getSpecialty().size(); i++) {
                                 Specialty specialty = new Specialty();
                                 specialty.setSpecId(employeeList.get(j).getSpecialty().get(i).getSpecId());
                                 Utils.Log("SpecialtyID is: " + employeeList.get(j).getSpecialty().get(i).getSpecId());
@@ -68,7 +68,7 @@ public class EmployeeService extends AppCompatActivity {
                                 set.add(specialty);
                                 Utils.Log("Specialty is: " + specialty);
                             }
-                            employee.setSpecialty(specialtyList);
+                            employee.setSpecialty(specialtyList);*/
                             employeeDao.insert(employee);
                         }
                         /*for (Specialty specialty : set) {
