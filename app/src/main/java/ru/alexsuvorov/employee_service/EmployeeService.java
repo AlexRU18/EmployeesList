@@ -1,6 +1,7 @@
 package ru.alexsuvorov.employee_service;
 
 import android.app.ProgressDialog;
+import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ru.alexsuvorov.employee_service.api.App;
+import ru.alexsuvorov.employee_service.dao.EmployeeDao;
+import ru.alexsuvorov.employee_service.db.AppDatabase;
 import ru.alexsuvorov.employee_service.db.DBAdapter;
 import ru.alexsuvorov.employee_service.fragments.SpecialtyListFragment;
 import ru.alexsuvorov.employee_service.model.Employee;
@@ -35,7 +38,11 @@ public class EmployeeService extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        mDbAdapter = new DBAdapter(this);
+
+        final AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "database").allowMainThreadQueries().build();
+        final EmployeeDao employeeDao = db.employeeDao();
+        //mDbAdapter = new DBAdapter(this);
         container = findViewById(R.id.fragmentContainer);
         if (Utils.isNetworkAvailable(this)) {
             pdialog = ProgressDialog.show(this, "Загрузка", "Пожалуйста, подождите");
@@ -53,18 +60,20 @@ public class EmployeeService extends AppCompatActivity {
                             employee.setBirthday(employeeList.get(j).getBirthday());
                             employee.setAge(employeeList.get(j).getAge());
                             employee.setAvatarLink(employeeList.get(j).getAvatarLink());
-                            for (int i = 0; i < set.size(); i++) {
+                            for (int i = 0; i < employeeList.get(j).getSpecialty().size(); i++) {
                                 Specialty specialty = new Specialty();
                                 specialty.setSpecId(employeeList.get(j).getSpecialty().get(i).getSpecId());
+                                Utils.Log("SpecialtyID is: " + employeeList.get(j).getSpecialty().get(i).getSpecId());
                                 specialty.setSpecName(employeeList.get(j).getSpecialty().get(i).getSpecName());
                                 set.add(specialty);
+                                Utils.Log("Specialty is: " + specialty);
                             }
                             employee.setSpecialty(specialtyList);
-                            mDbAdapter.insertWorker(employeeList.get(j));
+                            employeeDao.insert(employee);
                         }
-                        for (Specialty specialty : set) {
+                        /*for (Specialty specialty : set) {
                             mDbAdapter.insertSpecialty(specialty);
-                        }
+                        }*/
                     } else {
                         Utils.Log("response code " + response.code());
                     }

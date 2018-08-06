@@ -81,8 +81,9 @@ public class DBAdapter {
 
     private static final String CREATE_SPECIALTY_TABLE = "create table "
             + TABLE_SPECIALTY + "(" + COLUMN_AUTO_INCREMENT_ID + " integer primary key autoincrement, "
-            + COLUMN_SPECIALTY_ID + " text not null, "
-            + COLUMN_SPECIALTY_NAME + " text not null)";
+            + COLUMN_SPECIALTY_ID + " text not null UNIQUE, "
+            + COLUMN_SPECIALTY_NAME + " text not null, "
+            + " FOREIGN KEY (" + COLUMN_AUTO_INCREMENT_ID + ") REFERENCES " + TABLE_EMPLOYEES + "(" + "UEMPLOYEE" + "));";
 
     public void insertSpecialty(Specialty specialty) {
         open();
@@ -100,7 +101,7 @@ public class DBAdapter {
         close();
     }
 
-    public ArrayList<Specialty> getAllSpecialty() {
+    /*public ArrayList<Specialty> getAllSpecialty() {
         ArrayList<Specialty> specialtyList = new ArrayList<>();
         open();
         Cursor cur = db.query(TABLE_SPECIALTY, GET_ALL_SPECIALTY(), null, null, null, null, null);
@@ -116,7 +117,7 @@ public class DBAdapter {
         cur.close();
         close();
         return specialtyList;
-    }
+    }*/
 
     private static String[] GET_ALL_WORKERS() {
         return new String[]{COLUMN_AUTO_INCREMENT_ID, COLUMN_FNAME,
@@ -131,9 +132,9 @@ public class DBAdapter {
             + COLUMN_AGE + " integer, "
             + COLUMN_AVATARLINK + " text, "
             + COLUMN_WSPECIALTY + " integer, "
-            + " FOREIGN KEY (" + COLUMN_SPECIALTY_ID + ") REFERENCES " + TABLE_SPECIALTY + "(" + "UEMPLOYEE" + "));";
+            + " FOREIGN KEY (" + COLUMN_AUTO_INCREMENT_ID + ") REFERENCES " + TABLE_SPECIALTY + "(" + "UEMPLOYEE" + "));";
 
-    public void insertWorker(Employee employee) {
+    /*public void insertWorker(Employee employee) {
         open();
         ContentValues values = Employee.getContentValues(employee);
         try {
@@ -152,7 +153,7 @@ public class DBAdapter {
                             String.valueOf(employee.getSpecialty())});
         }
         close();
-    }
+    }*/
 
     public ArrayList<Employee> getWorkersBySpecialtyId(int specialtyId) {
         ArrayList<Employee> employeesList = new ArrayList<>();
@@ -172,7 +173,7 @@ public class DBAdapter {
                 employee.setBirthday(cur.getString(cur.getColumnIndex("worker_birthday")));
                 employee.setAge(cur.getInt((cur.getColumnIndex("worker_age"))));
                 employee.setAvatarLink(cur.getString(cur.getColumnIndex("worker_avatar_link")));
-                employee.setSpecialty(cur.getInt((cur.getColumnIndex("worker_specialty"))));
+                //employee.setSpecialty(cur.getInt((cur.getColumnIndex("worker_specialty"))));
                 employeesList.add(employee);
                 cur.moveToNext();
             }

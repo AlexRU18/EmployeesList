@@ -52,7 +52,7 @@ public class EmployeeDetail extends Fragment {
             age.setText(String.format(res.getString(R.string.worker_age_prefix), String.valueOf(employee.getAge())));
         }
         birthday.setText(String.valueOf(employee.getBirthday()));
-        specialty.setText(dbAdapter.getSpecialtyNameById(employee.getSpecialty()));
+        //specialty.setText(dbAdapter.getSpecialtyNameById(employee.getSpecialty().));
         String avatarLink = employee.getAvatarLink();
         //Не нашёл способ обрабатывать пустые ссылки
         if (avatarLink == null || avatarLink.isEmpty()) {

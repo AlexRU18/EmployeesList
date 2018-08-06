@@ -1,9 +1,11 @@
 package ru.alexsuvorov.employee_service.api;
 
 import android.app.Application;
+import android.arch.persistence.room.Room;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.alexsuvorov.employee_service.db.AppDatabase;
 
 public class App extends Application {
 
@@ -11,9 +13,13 @@ public class App extends Application {
     private Retrofit retrofit;
     String BASE_URL = "http://gitlab.65apps.com/65gb/static/raw/master/";
 
+    public static App instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
+        Room.databaseBuilder(this, AppDatabase.class, "database").build();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

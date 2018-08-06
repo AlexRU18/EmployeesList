@@ -30,7 +30,7 @@ public class SpecialtyListFragment extends Fragment {
                 container, false);
         specialtyList = new ArrayList<>();
         DBAdapter dbAdapter = new DBAdapter(this.getContext());
-        specialtyList = dbAdapter.getAllSpecialty();
+        //specialtyList = dbAdapter.getAllSpecialty();
         return view;
     }
 
