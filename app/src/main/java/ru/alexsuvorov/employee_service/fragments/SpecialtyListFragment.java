@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import ru.alexsuvorov.employee_service.R;
 import ru.alexsuvorov.employee_service.adapters.SpecialtyListAdapter;
-import ru.alexsuvorov.employee_service.db.DBAdapter;
 import ru.alexsuvorov.employee_service.model.Specialty;
 
 public class SpecialtyListFragment extends Fragment {
@@ -29,7 +28,6 @@ public class SpecialtyListFragment extends Fragment {
         View view = inflater.inflate(R.layout.specialty_list,
                 container, false);
         specialtyList = new ArrayList<>();
-        DBAdapter dbAdapter = new DBAdapter(this.getContext());
         //specialtyList = dbAdapter.getAllSpecialty();
         return view;
     }

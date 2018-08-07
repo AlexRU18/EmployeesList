@@ -1,17 +1,6 @@
 package ru.alexsuvorov.employee_service.db;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import java.util.ArrayList;
-
-import ru.alexsuvorov.employee_service.model.Employee;
-
-public class DBAdapter {
+/*public class DBAdapter {
 
     private final int DATABASE_VERSION = 1;
     private DatabaseHelper DBHelper;
@@ -97,7 +86,7 @@ public class DBAdapter {
         }
         close();
     }
-*/
+
     /*public ArrayList<Specialty> getAllSpecialty() {
         ArrayList<Specialty> specialtyList = new ArrayList<>();
         open();
@@ -114,7 +103,7 @@ public class DBAdapter {
         cur.close();
         close();
         return specialtyList;
-    }*/
+    }
 
     private static String[] GET_ALL_WORKERS() {
         return new String[]{COLUMN_AUTO_INCREMENT_ID, COLUMN_FNAME,
@@ -131,7 +120,7 @@ public class DBAdapter {
             + COLUMN_WSPECIALTY + " integer, "
             + " FOREIGN KEY (" + COLUMN_AUTO_INCREMENT_ID + ") REFERENCES " + TABLE_SPECIALTY + "(" + "UEMPLOYEE" + "));";
 
-    /*public void insertWorker(Employee employee) {
+    public void insertWorker(Employee employee) {
         open();
         ContentValues values = Employee.getContentValues(employee);
         try {
@@ -150,7 +139,7 @@ public class DBAdapter {
                             String.valueOf(employee.getSpecialty())});
         }
         close();
-    }*/
+    }
 
     public ArrayList<Employee> getWorkersBySpecialtyId(int specialtyId) {
         ArrayList<Employee> employeesList = new ArrayList<>();
@@ -170,7 +159,7 @@ public class DBAdapter {
                 employee.setBirthday(cur.getString(cur.getColumnIndex("worker_birthday")));
                 employee.setAge(cur.getInt((cur.getColumnIndex("worker_age"))));
                 employee.setAvatarLink(cur.getString(cur.getColumnIndex("worker_avatar_link")));
-                //employee.setSpecialty(cur.getInt((cur.getColumnIndex("worker_specialty"))));
+                employee.setSpecialty(cur.getInt((cur.getColumnIndex("worker_specialty"))));
                 employeesList.add(employee);
                 cur.moveToNext();
             }
@@ -203,15 +192,15 @@ public class DBAdapter {
         close();
         return specialtyName;
     }
-    /*public void deleteAllData() {
+    public void deleteAllData() {
         open();
         db.delete(TABLE_NAME, null, null);
         close();
-    }*/
+    }
 
-    /*public void deleteSingleData(String userId) {
+    public void deleteSingleData(String userId) {
         open();
         boolean var = db.delete(TABLE_NAME, COLUMN_USER_ID + "=" + userId, null);
         close();
-    }*/
-}
+    }
+}*/

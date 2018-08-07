@@ -9,7 +9,7 @@ public class EmployeeToSpecialty {
     @Embedded
     public Employee employee;
 
-    @Relation(parentColumn = "employeeId", entityColumn = "specialty_id", entity = Specialty.class)
+    @Relation(parentColumn = "employee_id", entityColumn = "specialty_id"/*, entity = Specialty.class*/)
     public List<Specialty> specialties;
 
 }

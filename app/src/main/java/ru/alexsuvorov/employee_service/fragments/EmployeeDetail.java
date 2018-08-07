@@ -11,10 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import ru.alexsuvorov.employee_service.R;
-import ru.alexsuvorov.employee_service.db.DBAdapter;
 import ru.alexsuvorov.employee_service.model.Employee;
 
 public class EmployeeDetail extends Fragment {
@@ -22,7 +19,6 @@ public class EmployeeDetail extends Fragment {
     private TextView fname, lname, birthday, specialty, age;
     private ImageView avatarImage;
     private Employee employee;
-    DBAdapter dbAdapter;
     Resources res;
 
     @Override
@@ -32,7 +28,6 @@ public class EmployeeDetail extends Fragment {
                 container, false);
         Bundle bundle = getArguments();
         employee = (Employee) bundle.getSerializable("employee");
-        dbAdapter = new DBAdapter(this.getContext());
         fname = view.findViewById(R.id.employee_fname);
         lname = view.findViewById(R.id.employee_lname);
         birthday = view.findViewById(R.id.employee_birthday);
@@ -53,7 +48,7 @@ public class EmployeeDetail extends Fragment {
         }
         birthday.setText(String.valueOf(employee.getBirthday()));
         //specialty.setText(dbAdapter.getSpecialtyNameById(employee.getSpecialty().));
-        String avatarLink = employee.getAvatarLink();
+        /*String avatarLink = employee.getAvatarLink();
         //Не нашёл способ обрабатывать пустые ссылки
         if (avatarLink == null || avatarLink.isEmpty()) {
             Picasso.get()
@@ -68,6 +63,6 @@ public class EmployeeDetail extends Fragment {
                     .resize(350, 350)
                     .centerCrop()
                     .into(avatarImage);
-        }
+        }*/
     }
 }

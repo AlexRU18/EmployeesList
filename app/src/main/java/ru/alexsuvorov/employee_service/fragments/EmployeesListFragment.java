@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 import ru.alexsuvorov.employee_service.R;
 import ru.alexsuvorov.employee_service.adapters.EmployeesListAdapter;
-import ru.alexsuvorov.employee_service.db.DBAdapter;
 import ru.alexsuvorov.employee_service.model.Employee;
 
 public class EmployeesListFragment extends Fragment {
@@ -34,8 +33,7 @@ public class EmployeesListFragment extends Fragment {
         Bundle bundle = getArguments();
         position = bundle.getInt("specialty_id");
         workersList = new ArrayList<>();
-        DBAdapter dbAdapter = new DBAdapter(this.getContext());
-        workersList = dbAdapter.getWorkersBySpecialtyId(position);
+        //workersList = dbAdapter.getWorkersBySpecialtyId(position);
         return view;
     }
 
