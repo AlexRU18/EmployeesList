@@ -19,9 +19,13 @@ public interface EmployeeDao {
     @Query("SELECT * FROM employee")
     List<Employee> getAll();
 
-    @Transaction
+    /*@Transaction
     @Query("SELECT * FROM employee")
-    List<EmployeeToSpecialty> loadEmployeeToSpecialty();
+    List<EmployeeToSpecialty> loadEmployeeToSpecialty();*/
+
+    @Transaction
+    @Query("SELECT * FROM specialty"/* WHERE specialty_id= :specialty_id"*/)
+    List<EmployeeToSpecialty> loadEmployeeToSpecialty(int specialty_id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Employee employee);

@@ -10,7 +10,6 @@ import ru.alexsuvorov.employee_service.db.AppDatabase;
 public class App extends Application {
 
     private static ReaderApi readerApi;
-    private Retrofit retrofit;
     String BASE_URL = "http://gitlab.65apps.com/65gb/static/raw/master/";
 
     public static App instance;
@@ -21,7 +20,7 @@ public class App extends Application {
         instance = this;
         Room.databaseBuilder(this, AppDatabase.class, "database").build();
 
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
                 .build();

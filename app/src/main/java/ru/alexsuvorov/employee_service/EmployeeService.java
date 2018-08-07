@@ -45,9 +45,9 @@ public class EmployeeService extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                     if (response.isSuccessful()) {
-                        employeeList.addAll(response.body().getResponse());
+                        employeeList.addAll(response.body().getResponseEmployees());
                         for (int j = 0; j < employeeList.size(); j++) {
-                            Utils.Log("List " + employeeList.get(j).getF_name());
+                            Utils.Log("employeeList: " + employeeList.get(j).getF_name());
                             Employee employee = new Employee();
                             employee.setF_name(employeeList.get(j).getF_name());
                             employee.setL_name(employeeList.get(j).getL_name());
@@ -55,21 +55,27 @@ public class EmployeeService extends AppCompatActivity {
                             employee.setAge(employeeList.get(j).getAge());
                             employee.setAvatarLink(employeeList.get(j).getAvatarLink());
 
-                            /*set.add(loadEmployeeToSpecialty());
-                            loadEmployeeToSpecialty*/
+                            for (int i = 0; i < response.body().getResponseEmployees().get(i).getSpecialty().size(); i++) {
+                                Utils.Log("ResponseBody: " + response.body().getResponseEmployees().get(i).getSpecialty().get(i));
+                            }
+                            //specialtyList.add((Specialty) employeeDao.loadEmployeeToSpecialty(employeeList.get(j).employeeId));
 
-
-                            /*for (int i = 0; i < employeeList.get(j).getSpecialty().size(); i++) {
+                            for (int i = 0; i < employeeList.get(j).getSpecialty().size(); i++) {
                                 Specialty specialty = new Specialty();
                                 specialty.setSpecId(employeeList.get(j).getSpecialty().get(i).getSpecId());
                                 Utils.Log("SpecialtyID is: " + employeeList.get(j).getSpecialty().get(i).getSpecId());
+                                Utils.Log("SpecialtySIZE is: " + employeeList.get(j).getSpecialty().size());
                                 specialty.setSpecName(employeeList.get(j).getSpecialty().get(i).getSpecName());
                                 set.add(specialty);
-                                Utils.Log("Specialty is: " + specialty);
-                            }*/
+                                Utils.Log("Specialty is: " + specialty.getSpecName());
+                            }
                             //employee.setSpecialty(specialtyList);
                             employeeDao.insert(employee);
                         }
+                        /*for (int i = 0; i < employeeDao.loadEmployeeToSpecialty(); i++) {
+                            Utils.Log("EMPLOYES SERVICE|SpecName: " + employeeDao.loadEmployeeToSpecialty().get(i).specialties.size());
+                            Utils.Log("EMPLOYES SERVICE|EmployeeName: " + employeeDao.loadEmployeeToSpecialty().get(i).employee.getF_name());
+                        }*/
                     } else {
                         Utils.Log("response code " + response.code());
                     }

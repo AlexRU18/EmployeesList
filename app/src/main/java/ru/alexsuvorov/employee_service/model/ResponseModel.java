@@ -16,20 +16,12 @@ public class ResponseModel {
     private ArrayList<Employee> employees = new ArrayList<>();
     private final static long serialVersionUID = 5750681858598462605L;
 
-    public ResponseModel() {
-    }
-
     @Ignore
     public ResponseModel(ArrayList<Employee> employees) {
         this.employees = employees;
     }
 
-    public List<Employee> getResponse() {
+    public List<Employee> getResponseEmployees() {
         return employees;
     }
-
-    public void setResponse(ArrayList<Employee> employees) {
-        this.employees = employees;
-    }
-
 }
