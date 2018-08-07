@@ -18,7 +18,6 @@ import retrofit2.Response;
 import ru.alexsuvorov.employee_service.api.App;
 import ru.alexsuvorov.employee_service.dao.EmployeeDao;
 import ru.alexsuvorov.employee_service.db.AppDatabase;
-import ru.alexsuvorov.employee_service.db.DBAdapter;
 import ru.alexsuvorov.employee_service.fragments.SpecialtyListFragment;
 import ru.alexsuvorov.employee_service.model.Employee;
 import ru.alexsuvorov.employee_service.model.ResponseModel;
@@ -26,13 +25,9 @@ import ru.alexsuvorov.employee_service.model.Specialty;
 import ru.alexsuvorov.employee_service.utils.Utils;
 
 public class EmployeeService extends AppCompatActivity {
-    //private static final String URL = "http://gitlab.65apps.com/65gb/static/raw/master/testTask.json";
-    Set<Specialty> set = new HashSet<>();
-    ArrayList<Employee> employeeList = new ArrayList<>();
-    ArrayList<Specialty> specialtyList = new ArrayList<>(set);
-    public DBAdapter mDbAdapter;
-    private ProgressDialog pdialog;
-    FrameLayout container;
+    private Set<Specialty> set = new HashSet<>();
+    private ArrayList<Employee> employeeList = new ArrayList<>();
+    private ArrayList<Specialty> specialtyList = new ArrayList<>(set);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +37,9 @@ public class EmployeeService extends AppCompatActivity {
         final AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database").allowMainThreadQueries().build();
         final EmployeeDao employeeDao = db.employeeDao();
-        //mDbAdapter = new DBAdapter(this);
-        container = findViewById(R.id.fragmentContainer);
+        FrameLayout container = findViewById(R.id.fragmentContainer);
         if (Utils.isNetworkAvailable(this)) {
-            pdialog = ProgressDialog.show(this, "Загрузка", "Пожалуйста, подождите");
+            ProgressDialog pdialog = ProgressDialog.show(this, "Загрузка", "Пожалуйста, подождите");
             App.getApi().getJSON().enqueue(new Callback<ResponseModel>() {
 
                 @Override
@@ -60,6 +54,11 @@ public class EmployeeService extends AppCompatActivity {
                             employee.setBirthday(employeeList.get(j).getBirthday());
                             employee.setAge(employeeList.get(j).getAge());
                             employee.setAvatarLink(employeeList.get(j).getAvatarLink());
+
+                            /*set.add(loadEmployeeToSpecialty());
+                            loadEmployeeToSpecialty*/
+
+
                             /*for (int i = 0; i < employeeList.get(j).getSpecialty().size(); i++) {
                                 Specialty specialty = new Specialty();
                                 specialty.setSpecId(employeeList.get(j).getSpecialty().get(i).getSpecId());
@@ -67,13 +66,10 @@ public class EmployeeService extends AppCompatActivity {
                                 specialty.setSpecName(employeeList.get(j).getSpecialty().get(i).getSpecName());
                                 set.add(specialty);
                                 Utils.Log("Specialty is: " + specialty);
-                            }
-                            employee.setSpecialty(specialtyList);*/
+                            }*/
+                            //employee.setSpecialty(specialtyList);
                             employeeDao.insert(employee);
                         }
-                        /*for (Specialty specialty : set) {
-                            mDbAdapter.insertSpecialty(specialty);
-                        }*/
                     } else {
                         Utils.Log("response code " + response.code());
                     }

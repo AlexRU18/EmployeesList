@@ -15,9 +15,6 @@ public interface SpecialtyDao {
     @Query("SELECT * FROM specialty")
     List<Specialty> getAllSpecialty();
 
-    @Query("SELECT * FROM specialty WHERE employeeId=:employeeId")
-    List<Specialty> findSpecialtiesForEmployee(final int employeeId);
-
     @Insert
     void insert(Specialty specialty);
 
