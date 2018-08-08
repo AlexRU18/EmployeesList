@@ -22,11 +22,11 @@ public class Specialty implements Serializable {
     @ColumnInfo(name = "specialty_name")
     public String name;
     @ColumnInfo(name = "employeeOwner_id")
-    public int employeeId;
+    public long employeeId;
     @Ignore
     public final static long serialVersionUID = 4288061416169200241L;
 
-    public Specialty(int specialty_id, String name, int employeeId) {
+    public Specialty(int specialty_id, String name, long employeeId) {
         this.specialty_id = specialty_id;
         this.name = name;
         this.employeeId = employeeId;
@@ -52,11 +52,11 @@ public class Specialty implements Serializable {
         this.name = name;
     }
 
-    public int getEmployeeId() {
+    public long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(long employeeId) {
         this.employeeId = employeeId;
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
 public class Employee implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "employee_id")
-    private int employeeId;
+    private long employeeId;
     @ColumnInfo(name = "f_name")
     private String f_name;
     @ColumnInfo(name = "l_name")
@@ -32,7 +32,7 @@ public class Employee implements Serializable {
     @Ignore
     private final static long serialVersionUID = -8824149947485321362L;
 
-    public Employee(int employeeId, String f_name, String l_name, String birthday, String avatr_url) {
+    public Employee(long employeeId, String f_name, String l_name, String birthday, String avatr_url) {
         this.employeeId = employeeId;
         this.f_name = f_name;
         this.l_name = l_name;
@@ -44,13 +44,19 @@ public class Employee implements Serializable {
     public Employee() {
     }
 
-    public int getEmployeeId() {
+    public long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int id) {
+    public void setId(long id) {
+
         this.employeeId = id;
+
     }
+
+    /*public void setEmployeeId(int id) {
+        this.employeeId = id;
+    }*/
 
     public String getF_name() {
         return f_name;

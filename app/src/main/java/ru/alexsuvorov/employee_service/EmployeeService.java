@@ -52,28 +52,20 @@ public class EmployeeService extends AppCompatActivity {
                             employee.setBirthday(response.body().getResponse().get(j).getBirthday());
                             employee.setAge(response.body().getResponse().get(j).getAge());
                             employee.setAvatr_url(response.body().getResponse().get(j).getAvatr_url());
+
+                            long lastId = employeeDao.insert(employee);
                             for (int i = 0; i < response.body().getResponse().get(j).getSpecialty().size(); i++) {
                                 Utils.Log("Должность: " + response.body().getResponse().get(j).getSpecialty().get(i).getSpecName());
-                                specialtyList.add(response.body().getResponse().get(j).getSpecialty().get(i));
-                                employee.setSpecialty(specialtyList);
-                            }
-
-
-                            //specialtyList.add((Specialty) employeeDao.loadSpecialtiesForEmployee(employeeList.get(j).employeeId));
-
-                            /*for (int i = 0; i < employeeList.get(j).getSpecialty().size(); i++) {
                                 Specialty specialty = new Specialty();
-                                specialty.setSpecId(employeeList.get(j).getSpecialty().get(i).getSpecId());
-                                Utils.Log("SpecialtyID is: " + employeeList.get(j).getSpecialty().get(i).getSpecId());
-                                Utils.Log("SpecialtySIZE is: " + employeeList.get(j).getSpecialty().size());
-                                specialty.setSpecName(employeeList.get(j).getSpecialty().get(i).getSpecName());
-                                set.add(specialty);
-                                Utils.Log("Specialty is: " + specialty.getSpecName());
-                            }*/
-                            //employee.setSpecialty(specialtyList);
-                            employeeDao.insert(employee);
+                                specialty.setSpecName(response.body().getResponse().get(j).getSpecialty().get(i).getSpecName());
+                                specialty.setSpecId(response.body().getResponse().get(j).getSpecialty().get(i).getSpecId());
+                                specialty.setEmployeeId(lastId);
+                                specialtyDao.insert(specialty);
+                                //specialtyList.add(response.body().getResponse().get(j).getSpecialty().get(i));
+                                //employee.setSpecialty(specialtyList);
+                            }
                         }
-                        Utils.Log("specialtyDao!!!!" + specialtyDao.loadSpecialtiesForEmployee(response.body().getResponse().get(2).getEmployeeId()));
+                        Utils.Log("specialtyDao!!!!" + specialtyDao.findSpecialtiesForEmployee(response.body().getResponse().get(2).getEmployeeId()));
                         /*for (int i = 0; i < employeeDao.loadEmployeeToSpecialty(); i++) {
                             Utils.Log("EMPLOYES SERVICE|SpecName: " + employeeDao.loadEmployeeToSpecialty().get(i).specialties.size());
                             Utils.Log("EMPLOYES SERVICE|EmployeeName: " + employeeDao.loadEmployeeToSpecialty().get(i).employee.getF_name());

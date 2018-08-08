@@ -19,9 +19,9 @@ public interface SpecialtyDao {
 
     @Transaction
     @Query("SELECT * FROM specialty WHERE employeeOwner_id = :employeeId")
-    List<Specialty> loadSpecialtiesForEmployee(int employeeId);
+    List<Specialty> findSpecialtiesForEmployee(long employeeId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Specialty specialty);
 
     @Delete
