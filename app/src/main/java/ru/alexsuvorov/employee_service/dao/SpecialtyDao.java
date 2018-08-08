@@ -9,7 +9,6 @@ import android.arch.persistence.room.Transaction;
 
 import java.util.List;
 
-import ru.alexsuvorov.employee_service.model.EmployeeToSpecialty;
 import ru.alexsuvorov.employee_service.model.Specialty;
 
 @Dao
@@ -20,7 +19,7 @@ public interface SpecialtyDao {
 
     @Transaction
     @Query("SELECT * FROM specialty WHERE employeeOwner_id = :employeeId")
-    List<EmployeeToSpecialty> loadSpecialtiesForEmployee(int employeeId);
+    List<Specialty> loadSpecialtiesForEmployee(int employeeId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Specialty specialty);

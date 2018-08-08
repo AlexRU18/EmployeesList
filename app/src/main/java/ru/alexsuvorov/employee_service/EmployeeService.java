@@ -45,22 +45,21 @@ public class EmployeeService extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                     if (response.isSuccessful()) {
-                        employeeList.addAll(response.body().getResponse());
-                        for (int j = 0; j < employeeList.size(); j++) {
-                            Utils.Log("employeeList: " + employeeList.get(j).getF_name());
+                        //employeeList.addAll(response.body().getResponse());
+                        for (int j = 0; j < response.body().getResponse().size(); j++) {
+                            Utils.Log("Имя: " + response.body().getResponse().get(j).getF_name());
                             Employee employee = new Employee();
                             employee.setEmployeeId(j);
-                            employee.setF_name(employeeList.get(j).getF_name());
-                            employee.setL_name(employeeList.get(j).getL_name());
-                            employee.setBirthday(employeeList.get(j).getBirthday());
-                            employee.setAge(employeeList.get(j).getAge());
-                            employee.setAvatr_url(employeeList.get(j).getAvatr_url());
+                            employee.setF_name(response.body().getResponse().get(j).getF_name());
+                            employee.setL_name(response.body().getResponse().get(j).getL_name());
+                            employee.setBirthday(response.body().getResponse().get(j).getBirthday());
+                            employee.setAge(response.body().getResponse().get(j).getAge());
+                            employee.setAvatr_url(response.body().getResponse().get(j).getAvatr_url());
 
                             for (int i = 0; i < response.body().getResponse().get(j).getSpecialty().size(); i++) {
-                                Utils.Log("ResponseBody: " + response.body().getResponse().get(j).getSpecialty().get(i).getSpecName());
+                                Utils.Log("Должность: " + response.body().getResponse().get(j).getSpecialty().get(i).getSpecName());
                             }
-                            //Utils.Log("DAO!!!!!!!!!!!!!!!: " + specialtyDao.loadSpecialtiesForEmployee(employeeList.get(j).getEmployeeId()));
-                            specialtyDao.loadSpecialtiesForEmployee(employeeList.get(j).getEmployeeId());
+
 
                             //specialtyList.add((Specialty) employeeDao.loadSpecialtiesForEmployee(employeeList.get(j).employeeId));
 
@@ -76,6 +75,7 @@ public class EmployeeService extends AppCompatActivity {
                             //employee.setSpecialty(specialtyList);
                             employeeDao.insert(employee);
                         }
+                        Utils.Log("specialtyDao!!!!" + specialtyDao.loadSpecialtiesForEmployee(response.body().getResponse().get(2).getEmployeeId()));
                         /*for (int i = 0; i < employeeDao.loadEmployeeToSpecialty(); i++) {
                             Utils.Log("EMPLOYES SERVICE|SpecName: " + employeeDao.loadEmployeeToSpecialty().get(i).specialties.size());
                             Utils.Log("EMPLOYES SERVICE|EmployeeName: " + employeeDao.loadEmployeeToSpecialty().get(i).employee.getF_name());
