@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,9 +23,9 @@ import ru.alexsuvorov.employee_service.model.Specialty;
 import ru.alexsuvorov.employee_service.utils.Utils;
 
 public class EmployeeService extends AppCompatActivity {
-    private Set<Specialty> set = new HashSet<>();
+    //private Set<Specialty> set = new HashSet<>();
     private ArrayList<Employee> employeeList = new ArrayList<>();
-    private ArrayList<Specialty> specialtyList = new ArrayList<>(set);
+    private ArrayList<Specialty> specialtyList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,6 @@ public class EmployeeService extends AppCompatActivity {
         if (Utils.isNetworkAvailable(this)) {
             ProgressDialog pdialog = ProgressDialog.show(this, "Загрузка", "Пожалуйста, подождите");
             App.getApi().getJSON().enqueue(new Callback<ResponseModel>() {
-
                 @Override
                 public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                     if (response.isSuccessful()) {
@@ -49,15 +46,16 @@ public class EmployeeService extends AppCompatActivity {
                         for (int j = 0; j < response.body().getResponse().size(); j++) {
                             Utils.Log("Имя: " + response.body().getResponse().get(j).getF_name());
                             Employee employee = new Employee();
-                            employee.setEmployeeId(j);
+                            //employee.setEmployeeId(j);
                             employee.setF_name(response.body().getResponse().get(j).getF_name());
                             employee.setL_name(response.body().getResponse().get(j).getL_name());
                             employee.setBirthday(response.body().getResponse().get(j).getBirthday());
                             employee.setAge(response.body().getResponse().get(j).getAge());
                             employee.setAvatr_url(response.body().getResponse().get(j).getAvatr_url());
-
                             for (int i = 0; i < response.body().getResponse().get(j).getSpecialty().size(); i++) {
                                 Utils.Log("Должность: " + response.body().getResponse().get(j).getSpecialty().get(i).getSpecName());
+                                specialtyList.add(response.body().getResponse().get(j).getSpecialty().get(i));
+                                employee.setSpecialty(specialtyList);
                             }
 
 
